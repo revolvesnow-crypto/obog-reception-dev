@@ -130,19 +130,47 @@
     }
 
     qrResult.textContent =
-      'QR読み取り成功！\n' +
-      '受付ID：' + receptionId;
-    
-    fetch('https://script.google.com/macros/s/AKfycbzdRcn5Jpi1K4feibiRSs8t6nFVJl9VJI7lpQ-ort--k9a2A7ENJG1CR55ml3z_n4AP/exec', {
-      method: 'POST',
-      mode: 'no-cors',
-      body: JSON.stringify({
-        receptionId: receptionId
-      })
-    });
+  'QR読み取り成功！\n' +
+  '受付ID：' + receptionId +
+  '\n参加者情報を確認しています...';
 
-    qrResult.textContent +=
-      '\nApps Scriptへ送信しました';
+const callbackName = 'participantCallback_' + Date.now();
+
+window[callbackName] = function(participant) {
+  if (participant.success) {
+    qrResult.textContent =
+      '参加者確認完了！\n\n' +
+      '氏名：' + participant.name + '\n' +
+      '期数：' + participant.term + '\n' +
+      '懇親会：' + participant.partyStatus + '\n' +
+      '受付状況：' + participant.receptionStatus;
+  } else {
+    qrResult.textContent =
+      '参加者を確認できませんでした。\n' +
+      participant.message;
+  }
+
+  delete window[callbackName];
+  script.remove();
+};
+
+const script = document.createElement('script');
+
+script.src =
+  'https://script.google.com/macros/s/AKfycbzdRcn5Jpi1K4feibiRSs8t6nFVJl9VJl7IpQ-ort--k9a2A7ENJG1CR55ml3z_n4AP/exec' +
+  '?api=participant' +
+  '&id=' + encodeURIComponent(receptionId) +
+  '&callback=' + encodeURIComponent(callbackName);
+
+script.onerror = function() {
+  qrResult.textContent =
+    '参加者情報の取得に失敗しました。';
+
+  delete window[callbackName];
+  script.remove();
+};
+
+document.body.appendChild(script);
     
   } catch (error) {
     qrResult.textContent =
