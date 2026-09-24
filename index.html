@@ -44,7 +44,11 @@
   <button type="button" onclick="startCamera()">
     📷 カメラを起動
   </button>
-
+  
+  <button type="button" onclick="startQrScanner()">
+    🔍 QRコードを読み取る
+  </button>
+  
   <p id="result">待機中</p>
 
   <video
@@ -53,6 +57,10 @@
     playsinline>
   </video>
 
+  <div id="qr-reader"></div>
+
+  <p id="qr-result">QR読み取り待機中</p>
+  
   <script>
     async function startCamera() {
       const result = document.getElementById('result');
@@ -91,6 +99,41 @@
         console.error(error);
       }
     }
+    async function startQrScanner() {
+  const qrResult = document.getElementById('qr-result');
+
+  qrResult.textContent = 'QRリーダー起動中...';
+
+  const scanner = new Html5Qrcode('qr-reader');
+
+  try {
+    await scanner.start(
+      { facingMode: 'environment' },
+      {
+        fps: 10,
+        qrbox: {
+          width: 250,
+          height: 250
+        }
+      },
+      function(decodedText) {
+        qrResult.textContent =
+          'QR読み取り成功！\n' +
+          decodedText;
+      },
+      function() {
+        // QRをまだ認識していない間は何もしない
+      }
+    );
+  } catch (error) {
+    qrResult.textContent =
+      'QRリーダー起動失敗\n' +
+      'name: ' + (error.name || '不明') + '\n' +
+      'message: ' + (error.message || String(error));
+
+    console.error(error);
+  }
+}
   </script>
 
 </body>
