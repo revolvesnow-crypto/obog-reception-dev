@@ -180,6 +180,9 @@ window[callbackName] = function(participant) {
         '&id=' + encodeURIComponent(receptionId) +
         '&callback=' + encodeURIComponent(checkInCallbackName);
 
+      qrResult.innerHTML +=
+        '<br><br>受付API URL：<a href="' + checkInScript.src + '" target="_blank">ここをタップ</a>';
+      
       checkInScript.onerror = function() {
         checkInButton.disabled = false;
         checkInButton.textContent = '受付する';
