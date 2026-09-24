@@ -162,6 +162,8 @@ script.src =
   '&id=' + encodeURIComponent(receptionId) +
   '&callback=' + encodeURIComponent(callbackName);
 
+qrResult.textContent += '\nAPI URL：' + script.src;
+       
 script.onerror = function() {
   qrResult.textContent =
     '参加者情報の取得に失敗しました。';
