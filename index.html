@@ -149,6 +149,40 @@ window[callbackName] = function(participant) {
     const checkInButton = document.createElement('button');
     checkInButton.textContent = '受付する';
     checkInButton.id = 'checkInButton';
+    
+    checkInButton.onclick = function() {
+      checkInButton.disabled = true;
+      checkInButton.textContent = '受付処理中...';
+    
+      const checkInCallbackName = 'checkInCallback_' + Date.now();
+    
+      window[checkInCallbackName] = function(result) {
+        if (result.success) {
+          qrResult.innerHTML =
+            '✓ 受付完了！<br><br>' +
+            '氏名：' + result.name + '<br>' +
+            '受付時刻：' + result.time;
+        } else {
+          checkInButton.disabled = false;
+          checkInButton.textContent = '受付する';
+          alert(result.message);
+        }
+    
+        delete window[checkInCallbackName];
+        checkInScript.remove();
+      };
+    
+      const checkInScript = document.createElement('script');
+    
+      checkInScript.src =
+        'https://script.google.com/macros/s/AKfycbzdRcn5Jpi1K4feibiRSs8t6nFVJl9VJl7IpQ-ort--k9a2A7ENJG1CR55ml3z_n4AP/exec' +
+        '?api=checkin' +
+        '&id=' + encodeURIComponent(receptionId) +
+        '&callback=' + encodeURIComponent(checkInCallbackName);
+    
+      document.body.appendChild(checkInScript);
+    };
+    
     qrResult.appendChild(checkInButton);
   }
   } else {
