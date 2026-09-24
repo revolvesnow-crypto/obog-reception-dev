@@ -128,7 +128,18 @@
     qrResult.textContent =
       'QR読み取り成功！\n' +
       '受付ID：' + receptionId;
+    
+    fetch('https://script.google.com/macros/s/AKfycbzdRcn5Jpi1K4feibiRSs8t6nFVJl9VJI7lpQ-ort--k9a2A7ENJG1CR55ml3z_n4AP/exec', {
+      method: 'POST',
+      mode: 'no-cors',
+      body: JSON.stringify({
+        receptionId: receptionId
+      })
+    });
 
+    qrResult.textContent +=
+      '\nApps Scriptへ送信しました';
+    
   } catch (error) {
     qrResult.textContent =
       'QRコードの解析に失敗しました。\n' +
