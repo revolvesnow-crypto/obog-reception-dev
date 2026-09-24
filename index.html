@@ -138,12 +138,19 @@ const callbackName = 'participantCallback_' + Date.now();
 
 window[callbackName] = function(participant) {
   if (participant.success) {
-    qrResult.textContent =
-      '参加者確認完了！\n\n' +
-      '氏名：' + participant.name + '\n' +
-      '期数：' + participant.term + '\n' +
-      '懇親会：' + participant.partyStatus + '\n' +
-      '受付状況：' + participant.receptionStatus;
+  qrResult.innerHTML =
+    '参加者確認完了！<br><br>' +
+    '氏名：' + participant.name + '<br>' +
+    '期数：' + participant.term + '<br>' +
+    '懇親会：' + participant.partyStatus + '<br>' +
+    '受付状況：' + participant.receptionStatus + '<br><br>';
+
+  if (participant.receptionStatus !== '受付済') {
+    const checkInButton = document.createElement('button');
+    checkInButton.textContent = '受付する';
+    checkInButton.id = 'checkInButton';
+    qrResult.appendChild(checkInButton);
+  }
   } else {
     qrResult.textContent =
       '参加者を確認できませんでした。\n' +
