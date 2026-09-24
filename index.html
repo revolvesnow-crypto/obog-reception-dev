@@ -179,7 +179,17 @@ window[callbackName] = function(participant) {
         '?api=checkin' +
         '&id=' + encodeURIComponent(receptionId) +
         '&callback=' + encodeURIComponent(checkInCallbackName);
-    
+
+      checkInScript.onerror = function() {
+        checkInButton.disabled = false;
+        checkInButton.textContent = '受付する';
+      
+        qrResult.innerHTML +=
+          '<br><br>❌ 受付APIの呼び出しに失敗しました。';
+      
+        delete window[checkInCallbackName];
+        checkInScript.remove();  
+  };
       document.body.appendChild(checkInScript);
     };
     
