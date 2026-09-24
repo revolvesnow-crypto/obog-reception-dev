@@ -116,11 +116,25 @@
           height: 250
         }
       },
-      function(decodedText) {
-        qrResult.textContent =
-          'QR読み取り成功！\n' +
-          decodedText;
-      },
+   function(decodedText) {
+  try {
+    const url = new URL(decodedText);
+    const receptionId = url.searchParams.get('id');
+
+    if (!receptionId) {
+      throw new Error('受付IDがURLに含まれていません');
+    }
+
+    qrResult.textContent =
+      'QR読み取り成功！\n' +
+      '受付ID：' + receptionId;
+
+  } catch (error) {
+    qrResult.textContent =
+      'QRコードの解析に失敗しました。\n' +
+      '読み取り内容：' + decodedText;
+  }
+},
       function() {
         // QRをまだ認識していない間は何もしない
       }
