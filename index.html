@@ -175,10 +175,26 @@ window[callbackName] = function(participant) {
     
       window[checkInCallbackName] = function(result) {
         if (result.success) {
+          participant.receptionStatus = '受付済';
+          
           qrResult.innerHTML =
             '✓ 受付完了！<br><br>' +
             '氏名：' + result.name + '<br>' +
             '受付時刻：' + result.time;
+          
+          const cancelButton = document.createElement('button');
+          cancelButton.textContent = '受付を取り消す';
+          cancelButton.id = 'cancelButton';
+          
+          qrResult.appendChild(document.createElement('br'));
+          qrResult.appendChild(document.createElement('br'));
+
+          cancelButton.onclick = function() {
+            alert('QR受付取消処理は次に接続します。');
+          };
+          
+          qrResult.appendChild(cancelButton);
+          
         } else {
           checkInButton.disabled = false;
           checkInButton.textContent = '受付する';
