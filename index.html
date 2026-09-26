@@ -404,10 +404,53 @@ function searchParticipantsByName() {
 
     actionButton.onclick = function() {
       if (participant.receptionStatus === '受付済') {
-        alert('受付取消処理は次に接続します。');
+        actionButton.disabled = true;
+        actionButton.textContent = '取消処理中...';
+      
+        const cancelCallbackName =
+          'manualCancelCallback_' + Date.now();
+      
+        window[cancelCallbackName] = function(result) {
+          if (result.success) {
+            participant.receptionStatus = '未受付';
+      
+            showParticipant(participant);
+      
+            alert(
+              result.name + ' 様の受付を取り消しました。'
+            );
+          } else {
+            actionButton.disabled = false;
+            actionButton.textContent = '受付を取り消す';
+            alert(result.message);
+          }
+      
+          delete window[cancelCallbackName];
+          cancelScript.remove();
+        };
+      
+        const cancelScript =
+          document.createElement('script');
+      
+        cancelScript.src =
+          'https://script.google.com/macros/s/AKfycbzdRcn5Jpi1K4feibiRSs8t6nFVJl9VJI7lpQ-ort--k9a2A7ENJG1CR55ml3z_n4AP/exec' +
+          '?api=cancel' +
+          '&id=' + encodeURIComponent(participant.receptionId) +
+          '&callback=' + encodeURIComponent(cancelCallbackName);
+      
+        cancelScript.onerror = function() {
+          actionButton.disabled = false;
+          actionButton.textContent = '受付を取り消す';
+      
+          alert('受付取消APIの呼び出しに失敗しました。');
+      
+          delete window[cancelCallbackName];
+          cancelScript.remove();
+        };
+      
+        document.body.appendChild(cancelScript);
         return;
-      }
-    
+}    
       actionButton.disabled = true;
       actionButton.textContent = '受付処理中...';
     
