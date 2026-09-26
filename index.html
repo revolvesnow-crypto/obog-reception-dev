@@ -404,12 +404,58 @@ function searchParticipantsByName() {
 
     actionButton.onclick = function() {
       if (participant.receptionStatus === '受付済') {
-      alert('受付取消処理は次に接続します。');
-      return;
+        alert('受付取消処理は次に接続します。');
+        return;
       }
-      
-      alert('受付処理は次に接続します。');
-    };
+    
+      actionButton.disabled = true;
+      actionButton.textContent = '受付処理中...';
+    
+      const checkInCallbackName =
+        'manualCheckInCallback_' + Date.now();
+    
+      window[checkInCallbackName] = function(result) {
+        if (result.success) {
+          participant.receptionStatus = '受付済';
+    
+          showParticipant(participant);
+    
+          alert(
+            result.name + ' 様の受付が完了しました。\n' +
+            '受付時刻：' + result.time
+          );
+        } else {
+          actionButton.disabled = false;
+          actionButton.textContent = '受付する';
+          alert(result.message);
+        }
+    
+        delete window[checkInCallbackName];
+        checkInScript.remove();
+      };
+    
+      const checkInScript =
+        document.createElement('script');
+    
+      checkInScript.src =
+        'https://script.google.com/macros/s/AKfycbzdRcn5Jpi1K4feibiRSs8t6nFVJl9VJI7lpQ-ort--k9a2A7ENJG1CR55ml3z_n4AP/exec' +
+        '?api=checkin' +
+        '&id=' + encodeURIComponent(participant.receptionId) +
+        '&method=' + encodeURIComponent('手動') +
+        '&callback=' + encodeURIComponent(checkInCallbackName);
+    
+      checkInScript.onerror = function() {
+        actionButton.disabled = false;
+        actionButton.textContent = '受付する';
+    
+        alert('受付APIの呼び出しに失敗しました。');
+    
+        delete window[checkInCallbackName];
+        checkInScript.remove();
+      };
+    
+      document.body.appendChild(checkInScript);
+};
   
     resultsArea.appendChild(document.createElement('br'));
     resultsArea.appendChild(document.createElement('br'));
