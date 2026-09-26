@@ -190,7 +190,115 @@ window[callbackName] = function(participant) {
           qrResult.appendChild(document.createElement('br'));
 
           cancelButton.onclick = function() {
-            alert('QR受付取消処理は次に接続します。');
+            cancelButton.disabled = true;
+            cancelButton.textContent = '取消処理中...';
+          
+            const cancelCallbackName =
+              'qrCancelCallback_' + Date.now();
+          
+            window[cancelCallbackName] = function(result) {
+              if (result.success) {
+                participant.receptionStatus = '未受付';
+          
+                qrResult.innerHTML =
+                  '✓ 受付取消完了<br><br>' +
+                  '氏名：' + result.name;
+          
+                const checkInButton =
+                  document.createElement('button');
+          
+                checkInButton.textContent = '受付する';
+                checkInButton.id = 'checkInButton';
+
+                checkInButton.onclick = function() {
+                  checkInButton.disabled = true;
+                  checkInButton.textContent = '受付処理中...';
+                
+                  const reCheckInCallbackName =
+                    'qrReCheckInCallback_' + Date.now();
+                
+                  window[reCheckInCallbackName] = function(result) {
+                    if (result.success) {
+                      participant.receptionStatus = '受付済';
+                
+                      qrResult.innerHTML =
+                        '✓ 受付完了！<br><br>' +
+                        '氏名：' + result.name + '<br>' +
+                        '受付時刻：' + result.time;
+                
+                      alert(
+                        result.name + ' 様の受付が完了しました。\n' +
+                        '受付時刻：' + result.time
+                      );
+                    } else {
+                      checkInButton.disabled = false;
+                      checkInButton.textContent = '受付する';
+                      alert(result.message);
+                    }
+                
+                    delete window[reCheckInCallbackName];
+                    reCheckInScript.remove();
+                  };
+                
+                  const reCheckInScript =
+                    document.createElement('script');
+                
+                  reCheckInScript.src =
+                    'https://script.google.com/macros/s/AKfycbzdRcn5Jpi1K4feibiRSs8t6nFVJl9VJI7lpQ-ort--k9a2A7ENJG1CR55ml3z_n4AP/exec' +
+                    '?api=checkin' +
+                    '&id=' + encodeURIComponent(receptionId) +
+                    '&callback=' + encodeURIComponent(reCheckInCallbackName);
+                
+                  reCheckInScript.onerror = function() {
+                    checkInButton.disabled = false;
+                    checkInButton.textContent = '受付する';
+                
+                    alert('受付APIの呼び出しに失敗しました。');
+                
+                    delete window[reCheckInCallbackName];
+                    reCheckInScript.remove();
+                  };
+                
+                  document.body.appendChild(reCheckInScript);
+                };
+          
+                qrResult.appendChild(document.createElement('br'));
+                qrResult.appendChild(document.createElement('br'));
+                qrResult.appendChild(checkInButton);
+          
+                alert(
+                  result.name + ' 様の受付を取り消しました。'
+                );
+              } else {
+                cancelButton.disabled = false;
+                cancelButton.textContent = '受付を取り消す';
+                alert(result.message);
+              }
+          
+              delete window[cancelCallbackName];
+              cancelScript.remove();
+            };
+          
+            const cancelScript =
+              document.createElement('script');
+          
+            cancelScript.src =
+              'https://script.google.com/macros/s/AKfycbzdRcn5Jpi1K4feibiRSs8t6nFVJl9VJI7lpQ-ort--k9a2A7ENJG1CR55ml3z_n4AP/exec' +
+              '?api=cancel' +
+              '&id=' + encodeURIComponent(receptionId) +
+              '&callback=' + encodeURIComponent(cancelCallbackName);
+          
+            cancelScript.onerror = function() {
+              cancelButton.disabled = false;
+              cancelButton.textContent = '受付を取り消す';
+          
+              alert('受付取消APIの呼び出しに失敗しました。');
+          
+              delete window[cancelCallbackName];
+              cancelScript.remove();
+            };
+          
+            document.body.appendChild(cancelScript);
           };
           
           qrResult.appendChild(cancelButton);
