@@ -134,8 +134,13 @@
     }
 
     function executeCancel(participant, method = 'QR', targetArea = document.getElementById('qr-result'), cancelButton) {
-    const qrResult = targetArea;
-    
+    const confirmed = confirm(participant.name + ' 様の受付を取り消してよろしいですか？');
+
+    if (!confirmed) {
+        return;
+    }
+
+    const qrResult = targetArea;    
         cancelButton.disabled = true;
         cancelButton.textContent = '取消処理中...';
 
