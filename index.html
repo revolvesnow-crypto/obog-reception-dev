@@ -394,6 +394,27 @@ function searchParticipantsByName() {
       '期数：' + participant.term + '<br>' +
       '懇親会：' + participant.partyStatus + '<br>' +
       '受付状況：' + participant.receptionStatus;
+
+    const actionButton = document.createElement('button');
+  
+    actionButton.textContent =
+      participant.receptionStatus === '受付済'
+        ? '受付を取り消す'
+        : '受付する';
+
+    actionButton.onclick = function() {
+      if (participant.receptionStatus === '受付済') {
+      alert('受付取消処理は次に接続します。');
+      return;
+      }
+      
+      alert('受付処理は次に接続します。');
+    };
+  
+    resultsArea.appendChild(document.createElement('br'));
+    resultsArea.appendChild(document.createElement('br'));
+    resultsArea.appendChild(actionButton);
+    
   }
   
 
