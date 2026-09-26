@@ -318,9 +318,7 @@ document.body.appendChild(script);
   }
 }
 
-function searchParticipantsByName() {
-  alert('名前検索ボタン反応した！');
-  
+function searchParticipantsByName() { 
   const keyword =
     document.getElementById('nameSearch').value.trim();
 
@@ -415,6 +413,7 @@ function searchParticipantsByName() {
             participant.receptionStatus = '未受付';
       
             showParticipant(participant);
+            searchParticipantsByName();
       
             alert(
               result.name + ' 様の受付を取り消しました。'
@@ -462,6 +461,7 @@ function searchParticipantsByName() {
           participant.receptionStatus = '受付済';
     
           showParticipant(participant);
+          searchParticipantsByName();
     
           alert(
             result.name + ' 様の受付が完了しました。\n' +
