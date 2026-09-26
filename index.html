@@ -225,6 +225,14 @@ window[callbackName] = function(participant) {
                         '✓ 受付完了！<br><br>' +
                         '氏名：' + result.name + '<br>' +
                         '受付時刻：' + result.time;
+
+                      const cancelButton = document.createElement('button');
+                      cancelButton.textContent = '受付を取り消す';
+                      cancelButton.id = 'cancelButton';
+                  
+                      qrResult.appendChild(document.createElement('br'));
+                      qrResult.appendChild(document.createElement('br'));
+                      qrResult.appendChild(cancelButton);
                 
                       alert(
                         result.name + ' 様の受付が完了しました。\n' +
@@ -378,7 +386,7 @@ window[callbackName] = function(participant) {
           cancelButton.disabled = false;
           cancelButton.textContent = '受付取消';
       
-          qrResult.innerHTML +=
+           +=
             '<br><br>❌ 受付取消APIの呼び出しに失敗しました。';
       
           delete window[cancelCallbackName];
@@ -409,11 +417,11 @@ script.src =
   '&id=' + encodeURIComponent(receptionId) +
   '&callback=' + encodeURIComponent(callbackName);
 
-qrResult.innerHTML +=
+ +=
   '<br>API URL：<a href="' + script.src + '" target="_blank">ここをタップ</a>';
        
 script.onerror = function() {
-  qrResult.innerHTML +=
+   +=
   '<br>参加者情報の取得に失敗しました。';
 
   delete window[callbackName];
