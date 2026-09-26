@@ -60,6 +60,23 @@
   <div id="qr-reader"></div>
 
   <p id="qr-result">QR読み取り待機中</p>
+
+  <hr>
+
+  <h2>名前で検索</h2>
+  
+  <label for="nameSearch">氏名・ふりがな</label>
+  
+  <input
+    type="text"
+    id="nameSearch"
+    placeholder="氏名またはふりがなを入力">
+  
+  <button type="button" id="nameSearchButton">
+    名前で検索
+  </button>
+  
+  <div id="nameSearchResults"></div>
   
   <script>
     async function startCamera() {
@@ -300,6 +317,85 @@ document.body.appendChild(script);
     console.error(error);
   }
 }
+
+function searchParticipantsByName() {
+  const keyword =
+    document.getElementById('nameSearch').value.trim();
+
+  if (!keyword) {
+    alert('氏名またはふりがなを入力してください。');
+    return;
+  }
+
+  const callbackName = 'searchCallback_' + Date.now();
+
+  window[callbackName] = function(results) {
+
+    const resultsArea =
+      document.getElementById('nameSearchResults');
+  
+    resultsArea.innerHTML = '';
+  
+    if (results.length === 0) {
+      resultsArea.textContent =
+        '該当する参加者が見つかりませんでした。';
+      return;
+    }
+
+    results.forEach(function(participant) {
+      const button = document.createElement('button');
+
+      button.textContent =
+        participant.name + '　-　' +
+        participant.receptionStatus;
+
+      button.onclick = function() {
+        showParticipant(participant);
+      };
+      
+      resultsArea.appendChild(button);
+    });
+
+    delete window[callbackName];
+    
+  };
+
+    const script = document.createElement('script');
+
+    script.src =
+      'https://script.google.com/macros/s/AKfycbzdRcn5Jpi1K4feibiRSs8t6nFVJl9VJI7lpQ-ort--k9a2A7ENJG1CR55ml3z_n4AP/exec' +
+      '?api=search' +
+      '&keyword=' + encodeURIComponent(keyword) +
+      '&callback=' + encodeURIComponent(callbackName);
+
+    script.onerror = function() {
+      const resultsArea =
+        document.getElementById('nameSearchResults');
+  
+      resultsArea.textContent =
+        '参加者検索に失敗しました。';
+  
+      delete window[callbackName];
+      script.remove();
+    };
+
+    document.body.appendChild(script);
+  
+  }
+  
+  function showParticipant(participant) {
+    const resultsArea =
+      document.getElementById('nameSearchResults');
+  
+    resultsArea.innerHTML =
+      '氏名：' + participant.name + '<br>' +
+      '期数：' + participant.term + '<br>' +
+      '懇親会：' + participant.partyStatus + '<br>' +
+      '受付状況：' + participant.receptionStatus;
+  }
+  
+}
+    
   </script>
 
 </body>
