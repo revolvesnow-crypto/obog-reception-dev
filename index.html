@@ -35,7 +35,7 @@
     🔍 QRコードを読み取る
   </button>
   
-  <div id="qr-reader"></div>
+  <div id="qr-reader" style="display: none;"></div>
 
   <p id="qr-result">QR読み取り待機中</p>
 
@@ -175,52 +175,56 @@
     }
     
     async function startQrScanner() {
-    const qrResult = document.getElementById('qr-result');
+        const qrResult = document.getElementById('qr-result');
+        const qrReader = document.getElementById('qr-reader');
 
-    qrResult.textContent = 'QRリーダー起動中...';
-  
-    const scanner = new Html5Qrcode('qr-reader');
-  
-    try {
-        await scanner.start(
-          { facingMode: 'environment' },
-          {
-            fps: 10,
-            qrbox: {
-              width: 250,
-              height: 250
-            }
-          },
-       function(decodedText) {
-         scanner.stop().catch(function(error) {
-           console.error(error);
-         });
-         
-         try {
-             const url = new URL(decodedText);
-             const receptionId = url.searchParams.get('id');
-          
-            if (!receptionId) {
-                throw new Error('受付IDがURLに含まれていません');
-            }
+        qrReader.style.display = 'block';
+        qrResult.textContent = 'QRリーダー起動中...';
+      
+        const scanner = new Html5Qrcode('qr-reader');
+      
+        try {
+            await scanner.start(
+              { facingMode: 'environment' },
+              {
+                fps: 10,
+                qrbox: {
+                  width: 250,
+                  height: 250
+                }
+              },
+           function(decodedText) {
+             scanner.stop().catch(function(error) {
+                 console.error(error);
+             });
 
-    qrResult.textContent =
-        'QR読み取り成功！\n' +
-        '受付ID：' + receptionId +
-        '\n参加者情報を確認しています...';
-
-    const callbackName = 'participantCallback_' + Date.now();
-
-   window[callbackName] = function(participant) {
-    if (participant.success) {
-        qrResult.innerHTML =
-            '参加者確認完了！<br><br>' +
-            '氏名：' + participant.name + '<br>' +
-            '期数：' + participant.term + '<br>' +
-            '懇親会：' + participant.partyStatus + '<br>' +
-            '受付状況：' + participant.receptionStatus + '<br><br>';
-
-        renderReceptionAction(participant);
+             qrReader.style.display = 'none';
+             
+             try {
+                 const url = new URL(decodedText);
+                 const receptionId = url.searchParams.get('id');
+              
+                if (!receptionId) {
+                    throw new Error('受付IDがURLに含まれていません');
+                }
+    
+        qrResult.textContent =
+            'QR読み取り成功！\n' +
+            '受付ID：' + receptionId +
+            '\n参加者情報を確認しています...';
+    
+        const callbackName = 'participantCallback_' + Date.now();
+    
+       window[callbackName] = function(participant) {
+        if (participant.success) {
+            qrResult.innerHTML =
+                '参加者確認完了！<br><br>' +
+                '氏名：' + participant.name + '<br>' +
+                '期数：' + participant.term + '<br>' +
+                '懇親会：' + participant.partyStatus + '<br>' +
+                '受付状況：' + participant.receptionStatus + '<br><br>';
+    
+            renderReceptionAction(participant);
 
     } else {
         qrResult.textContent =
@@ -261,6 +265,8 @@ qrResult.textContent =
       }
     );
   } catch (error) {
+    qrReader.style.display = 'none';
+          
     qrResult.textContent =
       'QRリーダー起動失敗\n' +
       'name: ' + (error.name || '不明') + '\n' +
