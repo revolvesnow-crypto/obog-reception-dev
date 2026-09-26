@@ -417,11 +417,11 @@ script.src =
   '&id=' + encodeURIComponent(receptionId) +
   '&callback=' + encodeURIComponent(callbackName);
 
- +=
+ qrResult.innerHTML +=
   '<br>API URL：<a href="' + script.src + '" target="_blank">ここをタップ</a>';
        
 script.onerror = function() {
-   +=
+  qrResult.innerHTML +=
   '<br>参加者情報の取得に失敗しました。';
 
   delete window[callbackName];
