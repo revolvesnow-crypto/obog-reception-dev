@@ -384,9 +384,9 @@ window[callbackName] = function(participant) {
       
         cancelScript.onerror = function() {
           cancelButton.disabled = false;
-          cancelButton.textContent = '受付取消';
+          cancelButton.textContent = '受付を取り消す';
       
-           +=
+          qrResult.innerHTML +=
             '<br><br>❌ 受付取消APIの呼び出しに失敗しました。';
       
           delete window[cancelCallbackName];
