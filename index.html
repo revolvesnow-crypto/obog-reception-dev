@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>OBOG受付 カメラテスト</title>
+  <title>OBOG交流会 受付</title>
 　<script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
 
   <style>
@@ -21,42 +21,20 @@
       margin: 16px 0;
     }
 
-    #result {
-      white-space: pre-wrap;
-    }
 
-    video {
-      width: 100%;
-      margin-top: 16px;
-      background: #000;
-    }
-  </style>
+     </style>
 </head>
 
 <body>
 
-  <h1>OBOG受付 カメラテスト</h1>
+  <h1>OBOG交流会 受付</h1>
 
-  <p>
-    GitHub Pages上でgetUserMedia()をテストします。
-  </p>
-
-  <button type="button" onclick="startCamera()">
-    📷 カメラを起動
-  </button>
+  
   
   <button type="button" onclick="startQrScanner()">
     🔍 QRコードを読み取る
   </button>
   
-  <p id="result">待機中</p>
-
-  <video
-    id="camera"
-    autoplay
-    playsinline>
-  </video>
-
   <div id="qr-reader"></div>
 
   <p id="qr-result">QR読み取り待機中</p>
@@ -79,44 +57,7 @@
   <div id="nameSearchResults"></div>
   
   <script>
-    async function startCamera() {
-      const result = document.getElementById('result');
-      const video = document.getElementById('camera');
-
-      result.textContent = 'カメラ起動中...';
-
-      try {
-        if (!navigator.mediaDevices) {
-          throw new Error('navigator.mediaDevices が利用できません');
-        }
-
-        if (!navigator.mediaDevices.getUserMedia) {
-          throw new Error('getUserMedia が利用できません');
-        }
-
-        const stream =
-          await navigator.mediaDevices.getUserMedia({
-            video: {
-              facingMode: 'environment'
-            },
-            audio: false
-          });
-
-        video.srcObject = stream;
-
-        result.textContent =
-          '成功：カメラを取得できました！';
-
-      } catch (error) {
-        result.textContent =
-          '失敗\n' +
-          'name: ' + (error.name || '不明') + '\n' +
-          'message: ' + (error.message || String(error));
-
-        console.error(error);
-      }
-    }
-
+    
     function renderReceptionAction(
     participant,
     targetArea = document.getElementById('qr-result'),
