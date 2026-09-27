@@ -55,6 +55,16 @@
   </button>
   
   <div id="nameSearchResults"></div>
+
+  <hr>
+
+  <h2>受付一覧</h2>
+  
+  <button type="button" id="receptionListButton" onclick="loadReceptionList()">
+    受付一覧を表示
+  </button>
+  
+  <div id="receptionListArea"></div>
   
   <script>
     
@@ -366,7 +376,40 @@ function searchParticipantsByName() {
         '手動'
     );
 }
-  
+
+    function loadReceptionList() {
+      const listArea = document.getElementById('receptionListArea');
+    
+      listArea.textContent = '受付一覧を読み込み中...';
+    
+      const callbackName = 'receptionListCallback_' + Date.now();
+    
+      window[callbackName] = function(participants) {
+        console.log(participants);
+    
+        listArea.textContent =
+          '受付一覧を取得しました：' + participants.length + '名';
+    
+        delete window[callbackName];
+        script.remove();
+      };
+    
+      const script = document.createElement('script');
+    
+      script.src =
+        'https://script.google.com/macros/s/AKfycbzdRcn5Jpi1K4feibiRSs8t6nFVJl9VJI7lpQ-ort--k9a2A7ENJG1CR55ml3z_n4AP/exec' +
+        '?api=list' +
+        '&callback=' + encodeURIComponent(callbackName);
+    
+      script.onerror = function() {
+        listArea.textContent = '受付一覧の取得に失敗しました。';
+    
+        delete window[callbackName];
+        script.remove();
+      };
+    
+      document.body.appendChild(script);
+    }
 
     
   </script>
