@@ -444,8 +444,15 @@ function searchParticipantsByName() {
 
     renderReceptionFilterControls(listArea);
     renderReceptionSortControls(listArea);
-    renderReceptionList(filteredParticipants, listArea);
-}
+    
+    if (filteredParticipants.length === 0) {
+        const noResults = document.createElement('p');
+        noResults.textContent = '該当する参加者が見つかりませんでした。';
+        noResults.className = 'reception-no-results';
+        listArea.appendChild(noResults);
+    } else {
+        renderReceptionList(filteredParticipants, listArea);
+    }
   
   function showParticipant(participant) {
     const resultsArea =
