@@ -466,6 +466,25 @@ function searchParticipantsByName() {
       }
 
       receptionListData.sort(function(a, b) {
+        const partOrder = {
+          'ソプラノ1': 1,
+          'ソプラノ2': 2,
+          'アルト1': 3,
+          'アルト2': 4,
+          'テノール1': 5,
+          'テノール2': 6,
+          'バス1': 7,
+          'バス2': 8
+        };
+        
+        if (receptionSortKey === 'part') {
+          const orderA = partOrder[a.part] || 999;
+          const orderB = partOrder[b.part] || 999;
+        
+          return receptionSortDirection === 'asc'
+            ? orderA - orderB
+            : orderB - orderA;
+        }
         const valueA = String(a[receptionSortKey] || '');
         const valueB = String(b[receptionSortKey] || '');
     
