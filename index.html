@@ -462,7 +462,7 @@ function searchParticipantsByName() {
     resultsArea.innerHTML =
         '氏名：' + participant.name + '<br>' +
         '期数：' + participant.term + '<br>' +
-        '懇親会：' + participant.partyStatus + '<br>' +
+        '懇親会：' + (participant.partyStatus || '参加') + '<br>' +
         '受付状況：' + participant.receptionStatus;
 
     renderReceptionAction(
