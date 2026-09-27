@@ -386,14 +386,28 @@ function searchParticipantsByName() {
     
       window[callbackName] = function(participants) {
         console.log(participants);
+        
+        receptionListData = participants;
+
+        receptionListData.sort(function(a, b) {
+          const valueA = String(a.kana || '');
+          const valueB = String(b.kana || '');
+        
+          return valueA.localeCompare(
+            valueB,
+            'ja',
+            { numeric: true }
+          );
+        });
       
         listArea.replaceChildren();
       
         const summary = document.createElement('p');
         summary.textContent = '参加者：' + participants.length + '名';
         listArea.appendChild(summary);
-      
-        renderReceptionList(participants, listArea);
+
+        renderReceptionSortControls(listArea);
+        renderReceptionList(receptionListData, listArea);
       
         delete window[callbackName];
         script.remove();
@@ -416,6 +430,10 @@ function searchParticipantsByName() {
       document.body.appendChild(script);
     }
 
+    let receptionListData = [];
+    let receptionSortKey = 'kana';
+    let receptionSortDirection = 'asc';
+    
     function renderReceptionList(participants, listArea) {
       participants.forEach(function(participant) {
         const item = document.createElement('p');
@@ -436,6 +454,80 @@ function searchParticipantsByName() {
     
         listArea.appendChild(item);
       });
+    }
+
+    function sortReceptionList(key) {
+      if (receptionSortKey === key) {
+        receptionSortDirection =
+          receptionSortDirection === 'asc' ? 'desc' : 'asc';
+      } else {
+        receptionSortKey = key;
+        receptionSortDirection = 'asc';
+      }
+
+      receptionListData.sort(function(a, b) {
+        const valueA = String(a[receptionSortKey] || '');
+        const valueB = String(b[receptionSortKey] || '');
+    
+        const comparison = valueA.localeCompare(
+          valueB,
+          'ja',
+          { numeric: true }
+        );
+    
+        return receptionSortDirection === 'asc'
+          ? comparison
+          : -comparison;
+      });
+
+      const listArea = document.getElementById('receptionListArea');
+
+      listArea.replaceChildren();
+    
+      const summary = document.createElement('p');
+      summary.textContent = '参加者：' + receptionListData.length + '名';
+      listArea.appendChild(summary);
+
+      renderReceptionSortControls(listArea);
+      renderReceptionList(receptionListData, listArea);
+      }
+
+    function renderReceptionSortControls(listArea) {
+      const controls = document.createElement('div');
+    
+      const sortOptions = [
+        { key: 'kana', label: '氏名' },
+        { key: 'term', label: '期数' },
+        { key: 'part', label: 'パート' },
+        { key: 'receptionStatus', label: '受付状況' },
+        { key: 'receptionTime', label: '受付時刻' }
+      ];
+    
+      const label = document.createElement('p');
+      label.textContent = '並び替え：';
+      controls.appendChild(label);
+    
+      sortOptions.forEach(function(option) {
+        const button = document.createElement('button');
+    
+        let directionMark = '';
+    
+        if (receptionSortKey === option.key) {
+          directionMark =
+            receptionSortDirection === 'asc' ? ' ▲' : ' ▼';
+        }
+    
+        button.type = 'button';
+        button.textContent = option.label + directionMark;
+    
+        button.onclick = function() {
+          sortReceptionList(option.key);
+        };
+    
+        controls.appendChild(button);
+      });
+    
+      listArea.appendChild(controls);
     }
 
     
