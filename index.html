@@ -222,6 +222,7 @@
           );
 
           renderReceptionAction(participant, targetArea, method);
+          loadReceptionList();
         } else {
           checkInButton.disabled = false;
           checkInButton.textContent = '受付する';
@@ -265,6 +266,7 @@
                     '氏名：' + result.name;
         
                 renderReceptionAction(participant, targetArea, method);   
+                loadReceptionList();
             } else {
                 cancelButton.disabled = false;
                 cancelButton.textContent = '受付取消';
