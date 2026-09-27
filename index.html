@@ -390,74 +390,62 @@ qrResult.textContent =
   }
 }
 
-function searchParticipantsByName() { 
-  const keyword =
-    document.getElementById('nameSearch').value.trim();
+function searchParticipantsByName() {
+    const keyword = document.getElementById('nameSearch').value.trim();
 
-  if (!keyword) {
-    alert('氏名またはふりがなを入力してください。');
-    return;
-  }
+    receptionSearchKeyword = keyword;
 
-  const callbackName = 'searchCallback_' + Date.now();
-
-  window[callbackName] = function(results) {
-
-    const resultsArea =
-      document.getElementById('nameSearchResults');
-  
-    resultsArea.innerHTML = '';
-  
-    if (results.length === 0) {
-      resultsArea.textContent =
-        '該当する参加者が見つかりませんでした。';
-
-      delete window[callbackName];
-      script.remove();
-      return;
+    if (receptionListData.length === 0) {
+        alert('先に受付一覧を表示してください。');
+        return;
     }
 
-    results.forEach(function(participant) {
-      const button = document.createElement('button');
+    const normalizedKeyword = keyword
+        .replace(/\s/g, '')
+        .toLowerCase();
 
-      button.textContent =
-        participant.name + '　-　' +
-        participant.receptionStatus;
+    const filteredParticipants = receptionListData.filter(function(participant) {
+        const name = String(participant.name || '')
+            .replace(/\s/g, '')
+            .toLowerCase();
 
-      button.onclick = function() {
-        showParticipant(participant);
-      };
-      
-      resultsArea.appendChild(button);
+        const kana = String(participant.kana || '')
+            .replace(/\s/g, '')
+            .toLowerCase();
+
+        const matchesSearch =
+            normalizedKeyword === '' ||
+            name.includes(normalizedKeyword) ||
+            kana.includes(normalizedKeyword);
+
+        const matchesStatus =
+            receptionFilter === 'all' ||
+            (receptionFilter === 'done' &&
+                participant.receptionStatus === '受付済') ||
+            (receptionFilter === 'pending' &&
+                participant.receptionStatus !== '受付済');
+
+        return matchesSearch && matchesStatus;
     });
 
-    delete window[callbackName];
-    script.remove();
-    
-  };
+    const listArea = document.getElementById('receptionListArea');
 
-    const script = document.createElement('script');
+    listArea.replaceChildren();
 
-    script.src =
-      'https://script.google.com/macros/s/AKfycbzdRcn5Jpi1K4feibiRSs8t6nFVJl9VJI7lpQ-ort--k9a2A7ENJG1CR55ml3z_n4AP/exec' +
-      '?api=search' +
-      '&keyword=' + encodeURIComponent(keyword) +
-      '&callback=' + encodeURIComponent(callbackName);
+    const summary = document.createElement('p');
+    summary.textContent =
+        '参加者：' +
+        receptionListData.length +
+        '名 ／ 表示：' +
+        filteredParticipants.length +
+        '名';
 
-    script.onerror = function() {
-      const resultsArea =
-        document.getElementById('nameSearchResults');
-  
-      resultsArea.textContent =
-        '参加者検索に失敗しました。';
-  
-      delete window[callbackName];
-      script.remove();
-    };
+    listArea.appendChild(summary);
 
-    document.body.appendChild(script);
-  
-  }
+    renderReceptionFilterControls(listArea);
+    renderReceptionSortControls(listArea);
+    renderReceptionList(filteredParticipants, listArea);
+}
   
   function showParticipant(participant) {
     const resultsArea =
@@ -534,6 +522,7 @@ function searchParticipantsByName() {
     let receptionSortKey = 'kana';
     let receptionSortDirection = 'asc';
     let receptionFilter = 'all';
+    let receptionSearchKeyword = '';
     
     
     function renderReceptionList(participants, listArea) {
