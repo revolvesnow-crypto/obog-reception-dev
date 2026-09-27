@@ -64,6 +64,27 @@
       text-align: center;
   }
 
+  .reception-status {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      color: white;
+      font-size: 14px;
+      font-weight: bold;
+      line-height: 1;
+  }
+    
+  .reception-status-done {
+    background-color: #22a559;
+  }
+  
+  .reception-status-pending {
+    background-color: #aeb7c2;
+  }
+
      </style>
 </head>
 
@@ -498,8 +519,17 @@ function searchParticipantsByName() {
       const row = document.createElement('tr');
   
       const statusCell = document.createElement('td');
-      statusCell.textContent =
+
+      const statusIcon = document.createElement('span');
+      statusIcon.className =
+          participant.receptionStatus === '受付済'
+              ? 'reception-status reception-status-done'
+              : 'reception-status reception-status-pending';
+      
+      statusIcon.textContent =
           participant.receptionStatus === '受付済' ? '✓' : '−';
+      
+      statusCell.appendChild(statusIcon);
   
       const nameCell = document.createElement('td');
       nameCell.textContent = participant.name;
