@@ -117,6 +117,13 @@
       margin: 0;
       font-size: 14px;
   }
+
+  .reception-filter-controls button.active {
+    background-color: #24a259;
+    color: white;
+    border-color: #24a259;
+    font-weight: bold;
+  }
     
 </style>
 </head>
@@ -666,6 +673,10 @@ function searchParticipantsByName() {
             const button = document.createElement('button');
             button.type = 'button';
             button.textContent = filter.label;
+
+            if (receptionFilter === filter.key) {
+                button.classList.add('active');
+            }  
     
             button.onclick = function() {
                 receptionFilter = filter.key;
