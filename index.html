@@ -643,13 +643,17 @@ function searchParticipantsByName() {
 
       const listArea = document.getElementById('receptionListArea');
 
+      receptionFilter = 'all';
+      
       listArea.replaceChildren();
     
       const summary = document.createElement('p');
       summary.textContent = '参加者：' + receptionListData.length + '名';
       listArea.appendChild(summary);
 
+      renderReceptionFilterControls(listArea);
       renderReceptionSortControls(listArea);
+      
       renderReceptionList(receptionListData, listArea);
       }
 
