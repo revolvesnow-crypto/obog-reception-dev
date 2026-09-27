@@ -35,6 +35,13 @@
       font-size: 16px;
       margin: 8px 0 16px;
   }
+
+   .reception-filter-button {
+    width: auto;
+    padding: 10px 16px;
+    font-size: 16px;
+    margin: 4px;
+  } 
     
   .reception-list-table {
       width: 100%;
@@ -688,6 +695,7 @@ function searchParticipantsByName() {
         filters.forEach(function(filter) {
             const button = document.createElement('button');
             button.type = 'button';
+            button.classList.add('reception-filter-button');
             button.textContent = filter.label;
 
             if (receptionFilter === filter.key) {
