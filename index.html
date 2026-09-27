@@ -553,6 +553,12 @@ function searchParticipantsByName() {
       
       participants.forEach(function(participant) {
       const row = document.createElement('tr');
+
+      row.style.cursor = 'pointer';
+
+      row.onclick = function() {
+          showParticipant(participant);
+      };
   
       const statusCell = document.createElement('td');
 
