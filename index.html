@@ -564,6 +564,22 @@ function searchParticipantsByName() {
       headers.forEach(function(headerText) {
           const th = document.createElement('th');
           th.textContent = headerText;
+      
+          if (headerText === '氏名') {
+              th.style.cursor = 'pointer';
+      
+              if (receptionSortKey === 'kana') {
+                  th.textContent =
+                      '氏名' +
+                      (receptionSortDirection === 'asc' ? ' ▲' : ' ▼');
+              }
+      
+              th.onclick = function(event) {
+                  event.stopPropagation();
+                  sortReceptionList('kana');
+              };
+          }
+      
           headerRow.appendChild(th);
       });
 
