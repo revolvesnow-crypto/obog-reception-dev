@@ -669,8 +669,29 @@ function searchParticipantsByName() {
     
             button.onclick = function() {
                 receptionFilter = filter.key;
-            };
-    
+            
+                const filteredParticipants = receptionListData.filter(function(participant) {
+                    if (receptionFilter === 'done') {
+                        return participant.receptionStatus === '受付済';
+                    }
+            
+                    if (receptionFilter === 'pending') {
+                        return participant.receptionStatus !== '受付済';
+                    }
+            
+                    return true;
+                });
+            
+                listArea.replaceChildren();
+            
+                const summary = document.createElement('p');
+                summary.textContent = '参加者：' + receptionListData.length + '名';
+                listArea.appendChild(summary);
+            
+                renderReceptionFilterControls(listArea);
+                renderReceptionSortControls(listArea);
+                renderReceptionList(filteredParticipants, listArea);
+            };    
             controls.appendChild(button);
         });
     
