@@ -386,10 +386,33 @@ function searchParticipantsByName() {
     
       window[callbackName] = function(participants) {
         console.log(participants);
-    
-        listArea.textContent =
-          '受付一覧を取得しました：' + participants.length + '名';
-    
+      
+        listArea.replaceChildren();
+      
+        const summary = document.createElement('p');
+        summary.textContent = '参加者：' + participants.length + '名';
+        listArea.appendChild(summary);
+      
+        participants.forEach(function(participant) {
+          const item = document.createElement('p');
+      
+          const status =
+            participant.receptionStatus === '受付済'
+              ? '受付済'
+              : '未受付';
+      
+          item.textContent =
+            participant.name +
+            ' ／ ' +
+            participant.term +
+            ' ／ ' +
+            participant.part +
+            ' ／ ' +
+            status;
+      
+          listArea.appendChild(item);
+        });
+      
         delete window[callbackName];
         script.remove();
       };
