@@ -435,25 +435,52 @@ function searchParticipantsByName() {
     let receptionSortDirection = 'asc';
     
     function renderReceptionList(participants, listArea) {
-      participants.forEach(function(participant) {
-        const item = document.createElement('p');
-    
-        const status =
-          participant.receptionStatus === '受付済'
-            ? '受付済'
-            : '未受付';
-    
-        item.textContent =
-          participant.name +
-          ' ／ ' +
-          participant.term +
-          ' ／ ' +
-          participant.part +
-          ' ／ ' +
-          status;
-    
-        listArea.appendChild(item);
+      const table = document.createElement('table');
+      table.className = 'reception-list-table';
+  
+      const thead = document.createElement('thead');
+      const headerRow = document.createElement('tr');
+  
+      const headers = ['受付', '氏名', '期数', 'パート', '懇親会'];
+  
+      headers.forEach(function(headerText) {
+          const th = document.createElement('th');
+          th.textContent = headerText;
+          headerRow.appendChild(th);
       });
+
+      thead.appendChild(headerRow);
+      table.appendChild(thead);
+      
+      participants.forEach(function(participant) {
+      const row = document.createElement('tr');
+  
+      const statusCell = document.createElement('td');
+      statusCell.textContent =
+          participant.receptionStatus === '受付済' ? '✓' : '−';
+  
+      const nameCell = document.createElement('td');
+      nameCell.textContent = participant.name;
+  
+      const termCell = document.createElement('td');
+      termCell.textContent = participant.term;
+  
+      const partCell = document.createElement('td');
+      partCell.textContent = participant.part;
+  
+      const partyCell = document.createElement('td');
+      partyCell.textContent = '参加';
+  
+      row.appendChild(statusCell);
+      row.appendChild(nameCell);
+      row.appendChild(termCell);
+      row.appendChild(partCell);
+      row.appendChild(partyCell);
+  
+      table.appendChild(row);
+  });
+  
+  listArea.appendChild(table);
     }
 
     function sortReceptionList(key) {
