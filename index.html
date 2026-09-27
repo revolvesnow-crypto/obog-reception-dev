@@ -393,25 +393,7 @@ function searchParticipantsByName() {
         summary.textContent = '参加者：' + participants.length + '名';
         listArea.appendChild(summary);
       
-        participants.forEach(function(participant) {
-          const item = document.createElement('p');
-      
-          const status =
-            participant.receptionStatus === '受付済'
-              ? '受付済'
-              : '未受付';
-      
-          item.textContent =
-            participant.name +
-            ' ／ ' +
-            participant.term +
-            ' ／ ' +
-            participant.part +
-            ' ／ ' +
-            status;
-      
-          listArea.appendChild(item);
-        });
+        renderReceptionList(participants, listArea);
       
         delete window[callbackName];
         script.remove();
@@ -432,6 +414,28 @@ function searchParticipantsByName() {
       };
     
       document.body.appendChild(script);
+    }
+
+    function renderReceptionList(participants, listArea) {
+      participants.forEach(function(participant) {
+        const item = document.createElement('p');
+    
+        const status =
+          participant.receptionStatus === '受付済'
+            ? '受付済'
+            : '未受付';
+    
+        item.textContent =
+          participant.name +
+          ' ／ ' +
+          participant.term +
+          ' ／ ' +
+          participant.part +
+          ' ／ ' +
+          status;
+    
+        listArea.appendChild(item);
+      });
     }
 
     
