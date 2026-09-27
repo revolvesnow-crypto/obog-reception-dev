@@ -85,7 +85,26 @@
     background-color: #aeb7c2;
   }
 
-     </style>
+  .reception-sort-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+  }
+
+  .reception-sort-controls p {
+    width: 100%;
+    margin: 0 0 4px;
+  }
+
+  .reception-sort-controls button {
+    width: auto;
+    padding: 8px 12px;
+    margin: 0;
+    font-size: 14px;
+  }
+
+</style>
 </head>
 
 <body>
@@ -612,6 +631,7 @@ function searchParticipantsByName() {
 
     function renderReceptionSortControls(listArea) {
       const controls = document.createElement('div');
+      controls.className = 'reception-sort-controls';
     
       const sortOptions = [
         { key: 'kana', label: '氏名' },
