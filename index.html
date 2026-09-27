@@ -488,6 +488,7 @@ function searchParticipantsByName() {
         summary.textContent = '参加者：' + participants.length + '名';
         listArea.appendChild(summary);
 
+        renderReceptionFilterControls(listArea);
         renderReceptionSortControls(listArea);
         renderReceptionList(receptionListData, listArea);
       
@@ -515,6 +516,8 @@ function searchParticipantsByName() {
     let receptionListData = [];
     let receptionSortKey = 'kana';
     let receptionSortDirection = 'asc';
+    let receptionFilter = 'all';
+    
     
     function renderReceptionList(participants, listArea) {
       const table = document.createElement('table');
@@ -629,6 +632,37 @@ function searchParticipantsByName() {
       renderReceptionList(receptionListData, listArea);
       }
 
+    function renderReceptionFilterControls(listArea) {
+        const controls = document.createElement('div');
+        controls.className = 'reception-filter-controls';
+    
+        const doneCount = receptionListData.filter(function(participant) {
+            return participant.receptionStatus === '受付済';
+        }).length;
+        
+        const pendingCount = receptionListData.length - doneCount;
+        
+        const filters = [
+            { key: 'all', label: 'すべて ' + receptionListData.length },
+            { key: 'done', label: '受付済 ' + doneCount },
+            { key: 'pending', label: '未受付 ' + pendingCount }
+        ];
+    
+        filters.forEach(function(filter) {
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.textContent = filter.label;
+    
+            button.onclick = function() {
+                receptionFilter = filter.key;
+            };
+    
+            controls.appendChild(button);
+        });
+    
+        listArea.appendChild(controls);
+    }
+    
     function renderReceptionSortControls(listArea) {
       const controls = document.createElement('div');
       controls.className = 'reception-sort-controls';
