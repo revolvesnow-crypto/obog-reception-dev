@@ -177,6 +177,10 @@
 </div>
 
  <div id="qrScreen" style="display: none;">
+   
+    <button type="button" onclick="showHomeScreen()">
+        ← 受付メニューに戻る
+    </button>
   
     <button type="button" onclick="startQrScanner()">
       🔍 QRコードを読み取る
@@ -235,8 +239,10 @@
 
     function showHomeScreen() {
     const homeScreen = document.getElementById('homeScreen');
+    const qrScreen = document.getElementById('qrScreen');
     const listScreen = document.getElementById('listScreen');
 
+    qrScreen.style.display = 'none';
     listScreen.style.display = 'none';
     homeScreen.style.display = 'block';
     }
