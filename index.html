@@ -191,6 +191,10 @@
  </div>
 
 <div id="listScreen" style="display: none;">
+
+  <button type="button" onclick="showHomeScreen()">
+    ← 受付メニューに戻る
+  </button>
   
  <h2>受付一覧</h2>
 
@@ -219,6 +223,14 @@
 
     homeScreen.style.display = 'none';
     listScreen.style.display = 'block';
+    }
+
+    function showHomeScreen() {
+    const homeScreen = document.getElementById('homeScreen');
+    const listScreen = document.getElementById('listScreen');
+
+    listScreen.style.display = 'none';
+    homeScreen.style.display = 'block';
     }
     
     function renderReceptionAction(
