@@ -162,10 +162,10 @@
 <div id="homeScreen">
   <h2>受付メニュー</h2>
 
-  <button type="button" id="homeQrButton">
-      🔍 QRコードを読み取る
+  <button type="button" id="homeQrButton" onclick="showQrScreen()">
+    🔍 QRコードを読み取る
   </button>
-
+  
   <button type="button" id="homeSearchButton">
       名前で検索
   </button>
@@ -223,6 +223,14 @@
 
     homeScreen.style.display = 'none';
     listScreen.style.display = 'block';
+    }
+
+    function showQrScreen() {
+    const homeScreen = document.getElementById('homeScreen');
+    const qrScreen = document.getElementById('qrScreen');
+
+    homeScreen.style.display = 'none';
+    qrScreen.style.display = 'block';
     }
 
     function showHomeScreen() {
