@@ -609,6 +609,21 @@ function searchParticipantsByName() {
                 sortReceptionList('part');
             };
         }
+
+        if (headerText === '受付') {
+            th.style.cursor = 'pointer';
+        
+            if (receptionSortKey === 'receptionStatus') {
+                th.textContent =
+                    '受付' +
+                    (receptionSortDirection === 'asc' ? ' ▲' : ' ▼');
+            }
+        
+            th.onclick = function(event) {
+                event.stopPropagation();
+                sortReceptionList('receptionStatus');
+            };
+        }
       
           headerRow.appendChild(th);
       });
