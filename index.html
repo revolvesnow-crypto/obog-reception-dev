@@ -764,7 +764,7 @@ function searchParticipantsByName() {
       listArea.appendChild(summary);
 
       renderReceptionFilterControls(listArea);
-      renderReceptionSortControls(listArea);
+      (listArea);
       
       renderReceptionList(receptionListData, listArea);
       }
@@ -817,7 +817,7 @@ function searchParticipantsByName() {
                 listArea.appendChild(summary);
             
                 renderReceptionFilterControls(listArea);
-                renderReceptionSortControls(listArea);
+                (listArea);
                 renderReceptionList(filteredParticipants, listArea);
             };    
             controls.appendChild(button);
@@ -826,7 +826,7 @@ function searchParticipantsByName() {
         listArea.appendChild(controls);
     }
     
-    function renderReceptionSortControls(listArea) {
+    function (listArea) {
       const controls = document.createElement('div');
       controls.className = 'reception-sort-controls';
     
