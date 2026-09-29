@@ -194,6 +194,33 @@
 
  </div>
 
+  </div>
+
+<div id="searchScreen" style="display: none;">
+
+    <button type="button" onclick="showHomeScreen()">
+        ← 受付メニューに戻る
+    </button>
+
+    <h2>名前で検索</h2>
+
+    <label for="nameSearch">氏名・ふりがな</label>
+    
+    <input
+      type="text"
+      id="nameSearch"
+      placeholder="氏名またはふりがなを入力">
+    
+    <button type="button" id="homeSearchButton" onclick="showSearchScreen()">
+    名前で検索
+    </button>
+    
+    <div id="nameSearchResults"></div>
+
+</div>
+
+<div id="listScreen" style="display: none;">
+
 <div id="listScreen" style="display: none;">
 
   <button type="button" onclick="showHomeScreen()">
@@ -202,18 +229,6 @@
   
  <h2>受付一覧</h2>
 
-  <label for="nameSearch">氏名・ふりがな</label>
-  
-  <input
-    type="text"
-    id="nameSearch"
-    placeholder="氏名またはふりがなを入力">
-  
-  <button type="button" id="nameSearchButton" onclick="searchParticipantsByName()">
-    名前で検索
-  </button>
-  
-  <div id="nameSearchResults"></div>
  
   <div id="receptionListArea"></div>
 
@@ -237,12 +252,22 @@
     qrScreen.style.display = 'block';
     }
 
+    function showSearchScreen() {
+    const homeScreen = document.getElementById('homeScreen');
+    const searchScreen = document.getElementById('searchScreen');
+
+    homeScreen.style.display = 'none';
+    searchScreen.style.display = 'block';
+    }
+
     function showHomeScreen() {
     const homeScreen = document.getElementById('homeScreen');
     const qrScreen = document.getElementById('qrScreen');
+    const searchScreen = document.getElementById('searchScreen');
     const listScreen = document.getElementById('listScreen');
 
     qrScreen.style.display = 'none';
+    searchScreen.style.display = 'none';
     listScreen.style.display = 'none';
     homeScreen.style.display = 'block';
     }
