@@ -630,6 +630,21 @@ function searchParticipantsByName() {
                 sortReceptionList('receptionStatus');
             };
         }
+
+        if (headerText === '受付時刻') {
+            th.style.cursor = 'pointer';
+        
+            if (receptionSortKey === 'receptionTime') {
+                th.textContent =
+                    '受付時刻' +
+                    (receptionSortDirection === 'asc' ? ' ▲' : ' ▼');
+            }
+        
+            th.onclick = function(event) {
+                event.stopPropagation();
+                sortReceptionList('receptionTime');
+            };
+        }
       
           headerRow.appendChild(th);
       });
