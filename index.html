@@ -170,8 +170,8 @@
       名前で検索
   </button>
 
-  <button type="button" id="homeListButton">
-      受付一覧
+  <button type="button" id="homeListButton" onclick="showListScreen()">
+    受付一覧
   </button>
   
 </div>
@@ -212,6 +212,14 @@
   </div>
   
   <script>
+
+    function showListScreen() {
+    const homeScreen = document.getElementById('homeScreen');
+    const listScreen = document.getElementById('listScreen');
+
+    homeScreen.style.display = 'none';
+    listScreen.style.display = 'block';
+    }
     
     function renderReceptionAction(
     participant,
