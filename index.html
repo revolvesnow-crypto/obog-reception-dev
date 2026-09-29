@@ -669,8 +669,20 @@ function searchParticipantsByName() {
       partCell.textContent = participant.part;
   
       const receptionTimeCell = document.createElement('td');
-      receptionTimeCell.textContent =
-          participant.receptionTime || '－';
+        
+      if (participant.receptionTime) {
+          const receptionDate = new Date(participant.receptionTime);
+      
+          receptionTimeCell.textContent =
+              receptionDate.toLocaleTimeString('ja-JP', {
+                  hour: '2-digit',
+                  minute: '2-digit',
+                  hour12: false,
+                  timeZone: 'Asia/Tokyo'
+              });
+      } else {
+          receptionTimeCell.textContent = '－';
+      }
   
       row.appendChild(statusCell);
       row.appendChild(nameCell);
