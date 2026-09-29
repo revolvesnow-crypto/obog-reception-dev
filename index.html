@@ -594,6 +594,21 @@ function searchParticipantsByName() {
                 sortReceptionList('term');
             };
         }
+
+        if (headerText === 'パート') {
+            th.style.cursor = 'pointer';
+        
+            if (receptionSortKey === 'part') {
+                th.textContent =
+                    'パート' +
+                    (receptionSortDirection === 'asc' ? ' ▲' : ' ▼');
+            }
+        
+            th.onclick = function(event) {
+                event.stopPropagation();
+                sortReceptionList('part');
+            };
+        }
       
           headerRow.appendChild(th);
       });
