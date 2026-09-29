@@ -468,8 +468,7 @@ function searchParticipantsByName() {
     listArea.appendChild(summary);
 
     renderReceptionFilterControls(listArea);
-    renderReceptionSortControls(listArea);
-    
+       
     if (filteredParticipants.length === 0) {
         const noResults = document.createElement('p');
         noResults.textContent = '該当する参加者が見つかりませんでした。';
