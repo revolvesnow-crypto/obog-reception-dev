@@ -579,6 +579,21 @@ function searchParticipantsByName() {
                   sortReceptionList('kana');
               };
           }
+
+        if (headerText === '期数') {
+            th.style.cursor = 'pointer';
+        
+            if (receptionSortKey === 'term') {
+                th.textContent =
+                    '期数' +
+                    (receptionSortDirection === 'asc' ? ' ▲' : ' ▼');
+            }
+        
+            th.onclick = function(event) {
+                event.stopPropagation();
+                sortReceptionList('term');
+            };
+        }
       
           headerRow.appendChild(th);
       });
