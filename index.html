@@ -494,7 +494,7 @@ function searchParticipantsByName() {
         resultsArea,
         '手動'
     );
-}
+  }
 
     function loadReceptionList() {
       const listArea = document.getElementById('receptionListArea');
@@ -526,7 +526,6 @@ function searchParticipantsByName() {
         listArea.appendChild(summary);
 
         renderReceptionFilterControls(listArea);
-        renderReceptionSortControls(listArea);
         renderReceptionList(receptionListData, listArea);
       
         delete window[callbackName];
