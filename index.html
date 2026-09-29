@@ -815,8 +815,7 @@ function searchParticipantsByName() {
                 summary.textContent = '参加者：' + receptionListData.length + '名';
                 listArea.appendChild(summary);
             
-                renderReceptionFilterControls(listArea);
-                (listArea);
+                renderReceptionFilterControls(listArea);      
                 renderReceptionList(filteredParticipants, listArea);
             };    
             controls.appendChild(button);
@@ -825,44 +824,7 @@ function searchParticipantsByName() {
         listArea.appendChild(controls);
     }
     
-    function renderReceptionSortControls(listArea) {
-      const controls = document.createElement('div');
-      controls.className = 'reception-sort-controls';
-    
-      const sortOptions = [
-        { key: 'kana', label: '氏名' },
-        { key: 'term', label: '期数' },
-        { key: 'part', label: 'パート' },
-        { key: 'receptionStatus', label: '受付状況' },
-        { key: 'receptionTime', label: '受付時刻' }
-      ];
-    
-      const label = document.createElement('p');
-      label.textContent = '並び替え：';
-      controls.appendChild(label);
-    
-      sortOptions.forEach(function(option) {
-        const button = document.createElement('button');
-    
-        let directionMark = '';
-    
-        if (receptionSortKey === option.key) {
-          directionMark =
-            receptionSortDirection === 'asc' ? ' ▲' : ' ▼';
-        }
-    
-        button.type = 'button';
-        button.textContent = option.label + directionMark;
-    
-        button.onclick = function() {
-          sortReceptionList(option.key);
-        };
-    
-        controls.appendChild(button);
-      });
-    
-      listArea.appendChild(controls);
-    }
+  
 
     window.addEventListener('DOMContentLoaded', function() {
     loadReceptionList();
