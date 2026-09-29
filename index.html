@@ -173,19 +173,22 @@
   <button type="button" id="homeListButton">
       受付一覧
   </button>
+  
 </div>
 
+ <div id="qrScreen" style="display: none;">
   
+    <button type="button" onclick="startQrScanner()">
+      🔍 QRコードを読み取る
+    </button>
+    
+    <div id="qr-reader" style="display: none;"></div>
   
-  <button type="button" onclick="startQrScanner()">
-    🔍 QRコードを読み取る
-  </button>
+    <p id="qr-result">QR読み取り待機中</p>
   
-  <div id="qr-reader" style="display: none;"></div>
+    <hr>
 
-  <p id="qr-result">QR読み取り待機中</p>
-
-  <hr>
+ </div>
 
 <div id="listScreen" style="display: none;">
   
