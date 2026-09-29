@@ -521,14 +521,7 @@ function searchParticipantsByName() {
             name.includes(normalizedKeyword) ||
             kana.includes(normalizedKeyword);
 
-        const matchesStatus =
-            receptionFilter === 'all' ||
-            (receptionFilter === 'done' &&
-                participant.receptionStatus === '受付済') ||
-            (receptionFilter === 'pending' &&
-                participant.receptionStatus !== '受付済');
-
-        return matchesSearch && matchesStatus;
+        return matchesSearch;
     });
 
     const listArea = document.getElementById('nameSearchResults');
@@ -544,8 +537,6 @@ function searchParticipantsByName() {
         '名';
 
     listArea.appendChild(summary);
-
-    renderReceptionFilterControls(listArea);
        
     if (filteredParticipants.length === 0) {
         const noResults = document.createElement('p');
