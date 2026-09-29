@@ -565,7 +565,7 @@ function searchParticipantsByName() {
       const thead = document.createElement('thead');
       const headerRow = document.createElement('tr');
   
-      const headers = ['受付', '氏名', '期数', 'パート', '懇親会'];
+      const headers = ['受付', '氏名', '期数', 'パート', '受付時刻'];
   
       headers.forEach(function(headerText) {
           const th = document.createElement('th');
@@ -668,14 +668,15 @@ function searchParticipantsByName() {
       const partCell = document.createElement('td');
       partCell.textContent = participant.part;
   
-      const partyCell = document.createElement('td');
-      partyCell.textContent = '参加';
+      const receptionTimeCell = document.createElement('td');
+      receptionTimeCell.textContent =
+          participant.receptionTime || '－';
   
       row.appendChild(statusCell);
       row.appendChild(nameCell);
       row.appendChild(termCell);
       row.appendChild(partCell);
-      row.appendChild(partyCell);
+      row.appendChild(receptionTimeCell);
   
       table.appendChild(row);
   });
