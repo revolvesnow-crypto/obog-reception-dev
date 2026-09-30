@@ -557,7 +557,7 @@ function searchParticipantsByName() {
     }
   }
     
-  function showParticipant(participant) {
+  function showParticipant(participant, method = '手動') {
       const detailArea =
           document.getElementById('participantDetailArea');
   
@@ -570,7 +570,7 @@ function searchParticipantsByName() {
       renderReceptionAction(
           participant,
           detailArea,
-          '手動'
+          method
       );
   
       showScreen('detailScreen');
