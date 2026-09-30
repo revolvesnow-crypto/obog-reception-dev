@@ -264,15 +264,7 @@
     }
 
     function showHomeScreen() {
-    const homeScreen = document.getElementById('homeScreen');
-    const qrScreen = document.getElementById('qrScreen');
-    const searchScreen = document.getElementById('searchScreen');
-    const listScreen = document.getElementById('listScreen');
-
-    qrScreen.style.display = 'none';
-    searchScreen.style.display = 'none';
-    listScreen.style.display = 'none';
-    homeScreen.style.display = 'block';
+        showScreen('homeScreen');
     }
     
     function renderReceptionAction(
