@@ -507,11 +507,10 @@ function searchParticipantsByName() {
 
     receptionSearchKeyword = keyword;
 
-    if (receptionListData.length === 0) {
-        alert('先に受付一覧を表示してください。');
-        return;
-    }
-
+   if (!receptionListLoaded) {
+      alert('参加者データを読み込み中です。少し待ってからもう一度お試しください。');
+      return;
+  }
     const normalizedKeyword = keyword
         .replace(/\s/g, '')
         .toLowerCase();
