@@ -589,6 +589,11 @@ function searchParticipantsByName() {
         receptionListData = participants;
         receptionListLoaded = true;
 
+        if (pendingNameSearch) {
+            pendingNameSearch = false;
+            searchParticipantsByName();
+        }
+
         receptionListData.sort(function(a, b) {
           const valueA = String(a.kana || '');
           const valueB = String(b.kana || '');
