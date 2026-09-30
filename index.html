@@ -232,12 +232,27 @@
   
   <script>
 
-    function showListScreen() {
-    const homeScreen = document.getElementById('homeScreen');
-    const listScreen = document.getElementById('listScreen');
+    function showScreen(screenId) {
+        const screenIds = [
+            'homeScreen',
+            'qrScreen',
+            'searchScreen',
+            'listScreen'
+        ];
+    
+        screenIds.forEach(function(id) {
+            const screen = document.getElementById(id);
+    
+            if (id === screenId) {
+                screen.style.display = 'block';
+            } else {
+                screen.style.display = 'none';
+            }
+        });
+    }
 
-    homeScreen.style.display = 'none';
-    listScreen.style.display = 'block';
+    function showListScreen() {
+        showScreen('listScreen');
     }
 
     function showQrScreen() {
