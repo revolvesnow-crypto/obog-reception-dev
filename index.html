@@ -186,6 +186,23 @@
 <div id="homeScreen">
   <h2>受付メニュー</h2>
 
+  <div id="receptionSummary">
+    <div class="summary-item">
+        <span class="summary-label">参加者数</span>
+        <span class="summary-value" id="totalCount">－</span>
+    </div>
+
+    <div class="summary-item">
+        <span class="summary-label">受付済</span>
+        <span class="summary-value" id="checkedInCount">－</span>
+    </div>
+
+    <div class="summary-item">
+        <span class="summary-label">未受付</span>
+        <span class="summary-value" id="pendingCount">－</span>
+    </div>
+</div>
+
   <button type="button" id="homeQrButton" class="home-menu-button" onclick="showQrScreen()">
     🔍 QRコードを読み取る
   </button>
