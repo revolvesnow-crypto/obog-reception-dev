@@ -508,9 +508,10 @@ function searchParticipantsByName() {
     receptionSearchKeyword = keyword;
 
    if (!receptionListLoaded) {
-      alert('参加者データを読み込み中です。少し待ってからもう一度お試しください。');
-      return;
-  }
+       pendingNameSearch = true;
+       return;
+   }
+  
     const normalizedKeyword = keyword
         .replace(/\s/g, '')
         .toLowerCase();
