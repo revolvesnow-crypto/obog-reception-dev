@@ -43,6 +43,37 @@
         border-left: 5px solid #c3d825;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
         color: #222222;
+        
+              #receptionSummary {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            margin: 20px 0 16px;
+            padding: 16px 8px;
+            background: #f4faef;
+            border-radius: 12px;
+        }
+        
+        .summary-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .summary-item + .summary-item {
+            border-left: 1px solid #dfe8d8;
+        }
+        
+        .summary-label {
+            font-size: 13px;
+            color: #666666;
+        }
+        
+        .summary-value {
+            font-size: 22px;
+            font-weight: 700;
+            color: #222222;
+        }
     }
 
   #nameSearch {
