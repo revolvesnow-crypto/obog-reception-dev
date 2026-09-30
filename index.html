@@ -100,6 +100,10 @@
         text-align: center;
     }
 
+    .home-menu-arrow-primary {
+        color: #ffffff;
+    }
+
     #homeQrButton {
         background: #16a34a;
         border: 1px solid #16a34a;
@@ -305,8 +309,10 @@
     </div>
 </div>
 
-  <button type="button" id="homeQrButton" class="home-menu-button" onclick="showQrScreen()">
-    🔍 QRコードを読み取る
+ <button type="button" id="homeQrButton" class="home-menu-button" onclick="showQrScreen()">
+      <span>🔍</span>
+      <span class="home-menu-label">QRコードを読み取る</span>
+      <span class="home-menu-arrow home-menu-arrow-primary">›</span>
   </button>
   
   <button type="button" id="homeSearchButton" class="home-menu-button" onclick="showSearchScreen()">
