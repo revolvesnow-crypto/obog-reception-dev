@@ -443,16 +443,9 @@
     
        window[callbackName] = function(participant) {
         if (participant.success) {
-            qrResult.innerHTML =
-                '参加者確認完了！<br><br>' +
-                '氏名：' + participant.name + '<br>' +
-                '期数：' + participant.term + '<br>' +
-                '懇親会：' + participant.partyStatus + '<br>' +
-                '受付状況：' + participant.receptionStatus + '<br><br>';
-    
-            renderReceptionAction(participant);
-
-    } else {
+            showParticipant(participant, 'QR');
+        } else {
+          
         qrResult.textContent =
             '参加者を確認できませんでした。\n' +
             participant.message;
