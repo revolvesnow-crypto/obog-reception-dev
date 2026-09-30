@@ -558,20 +558,22 @@ function searchParticipantsByName() {
   }
     
   function showParticipant(participant) {
-    const resultsArea =
-        document.getElementById('nameSearchResults');
-
-    resultsArea.innerHTML =
-        '氏名：' + participant.name + '<br>' +
-        '期数：' + participant.term + '<br>' +
-        '懇親会：' + (participant.partyStatus || '参加') + '<br>' +
-        '受付状況：' + participant.receptionStatus;
-
-    renderReceptionAction(
-        participant,
-        resultsArea,
-        '手動'
-    );
+      const detailArea =
+          document.getElementById('participantDetailArea');
+  
+      detailArea.innerHTML =
+          '氏名：' + participant.name + '<br>' +
+          '期数：' + participant.term + '<br>' +
+          '懇親会：' + (participant.partyStatus || '参加') + '<br>' +
+          '受付状況：' + participant.receptionStatus;
+  
+      renderReceptionAction(
+          participant,
+          detailArea,
+          '手動'
+      );
+  
+      showScreen('detailScreen');
   }
 
     function loadReceptionList() {
