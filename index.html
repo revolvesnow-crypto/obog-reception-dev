@@ -768,6 +768,7 @@ qrResult.textContent =
     );
 
   qrScanFrame.classList.add('is-visible');
+  qrResult.textContent = '読み取り待機中';
           
   } catch (error) {
     qrReader.style.display = 'none';
