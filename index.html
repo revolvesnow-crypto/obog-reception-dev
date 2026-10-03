@@ -679,7 +679,9 @@
     async function startQrScanner() {
         const qrResult = document.getElementById('qr-result');
         const qrReader = document.getElementById('qr-reader');
-
+        const qrScanFrame = document.querySelector('.qr-scan-frame');
+        qrScanFrame.classList.remove('is-visible');
+      
         qrReader.style.display = 'block';
         qrResult.textContent = 'QRリーダー起動中...';
       
@@ -759,6 +761,9 @@ qrResult.textContent =
         // QRをまだ認識していない間は何もしない
       }
     );
+
+  qrScanFrame.classList.add('is-visible');
+          
   } catch (error) {
     qrReader.style.display = 'none';
           
