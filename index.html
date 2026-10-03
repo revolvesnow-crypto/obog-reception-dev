@@ -72,6 +72,25 @@
             linear-gradient(#16a34a, #16a34a) right bottom / 46px 6px no-repeat,
             linear-gradient(#16a34a, #16a34a) right bottom / 6px 46px no-repeat;
     }
+    
+    .qr-status {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin: 16px 0 0;
+        font-size: 14px;
+        font-weight: 500;
+        color: #666666;
+    }
+    
+    .qr-status::before {
+        content: "";
+        width: 8px;
+        height: 8px;
+        flex-shrink: 0;
+        border-radius: 50%;
+        background: #9ca3af;
+    }
 
     #qr-shaded-region > div {
         display: none !important;
