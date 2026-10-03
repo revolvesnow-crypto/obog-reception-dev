@@ -726,13 +726,21 @@
                   height: 250
                 }
               },
-           function(decodedText) {
+           async function(decodedText) {
              scanner.stop().catch(function(error) {
                  console.error(error);
              });
 
-             qrScanFrame.classList.remove('is-visible');
-             qrReader.style.display = 'none';
+             qrScanFrame.classList.add('is-success');
+            qrResult.textContent = 'QRコードを認識しました';
+            
+            await new Promise(function(resolve) {
+                setTimeout(resolve, 450);
+            });
+            
+            qrScanFrame.classList.remove('is-visible');
+            qrScanFrame.classList.remove('is-success');
+            qrReader.style.display = 'none';
              
              try {
                  const url = new URL(decodedText);
