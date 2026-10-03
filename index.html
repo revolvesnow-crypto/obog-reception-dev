@@ -59,6 +59,8 @@
         transform: translate(-50%, -50%);
         pointer-events: none;
         z-index: 10;
+        opacity: 0;
+        transition: opacity 0.15s ease;
     
         background:
             linear-gradient(#16a34a, #16a34a) left top / 46px 6px no-repeat,
@@ -69,6 +71,10 @@
             linear-gradient(#16a34a, #16a34a) left bottom / 6px 46px no-repeat,
             linear-gradient(#16a34a, #16a34a) right bottom / 46px 6px no-repeat,
             linear-gradient(#16a34a, #16a34a) right bottom / 6px 46px no-repeat;
+    }
+
+    .qr-scan-frame.is-visible {
+        opacity: 1;
     }
 
     #qr-reader__scan_region {
