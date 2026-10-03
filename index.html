@@ -293,21 +293,50 @@
   <h2 class="home-section-title">受付メニュー</h2>
 
   <div id="receptionSummary">
-    <div class="summary-item">
-        <span class="summary-label">参加者数</span>
-        <span class="summary-value" id="totalCount">－</span>
-    </div>
-
-    <div class="summary-item">
-        <span class="summary-label">受付済</span>
-        <span class="summary-value" id="checkedInCount">－</span>
-    </div>
-
-    <div class="summary-item">
-        <span class="summary-label">未受付</span>
-        <span class="summary-value" id="pendingCount">－</span>
-    </div>
-</div>
+      <div class="summary-item">
+          <span class="summary-icon summary-icon-total" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="24" height="24">
+                  <circle cx="9" cy="8" r="3" fill="currentColor"></circle>
+                  <circle cx="16" cy="9" r="2.5" fill="currentColor" opacity="0.75"></circle>
+                  <path d="M3.5 18c0-3.2 2.4-5.5 5.5-5.5s5.5 2.3 5.5 5.5v1h-11z" fill="currentColor"></path>
+                  <path d="M13 14c0.9-0.8 2-1.2 3.2-1.2 2.5 0 4.3 1.8 4.3 4.4V19h-5v-1c0-1.5-0.5-2.8-1.4-3.9z" fill="currentColor" opacity="0.75"></path>
+              </svg>
+          </span>
+          <span class="summary-label">参加者数</span>
+          <span class="summary-value" id="totalCount">－</span>
+      </div>
+  
+      <div class="summary-item">
+          <span class="summary-icon summary-icon-checked" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="24" height="24">
+                  <circle cx="12" cy="12" r="9" fill="currentColor"></circle>
+                  <path d="M8 12.2l2.5 2.5L16.5 9"
+                        fill="none"
+                        stroke="#ffffff"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"></path>
+              </svg>
+          </span>
+          <span class="summary-label">受付済</span>
+          <span class="summary-value" id="checkedInCount">－</span>
+      </div>
+  
+      <div class="summary-item">
+          <span class="summary-icon summary-icon-pending" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="24" height="24">
+                  <circle cx="12" cy="12" r="9" fill="currentColor"></circle>
+                  <path d="M8.5 12h7"
+                        fill="none"
+                        stroke="#ffffff"
+                        stroke-width="2"
+                        stroke-linecap="round"></path>
+              </svg>
+          </span>
+          <span class="summary-label">未受付</span>
+          <span class="summary-value" id="pendingCount">－</span>
+      </div>
+  </div>
 
  <button type="button" id="homeQrButton" class="home-menu-button" onclick="showQrScreen()">
       <span>🔍</span>
