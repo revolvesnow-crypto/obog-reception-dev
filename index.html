@@ -714,7 +714,9 @@
         qrReader.style.display = 'block';
         qrResult.textContent = 'QRリーダー起動中...';
       
+      
         const scanner = new Html5Qrcode('qr-reader');
+        let qrDetected = false;
       
         try {
             await scanner.start(
@@ -727,25 +729,34 @@
                 }
               },
            async function(decodedText) {
-             scanner.stop().catch(function(error) {
-                 console.error(error);
-             });
+              if (qrDetected) {
+                  return;
+              }
+          
+              qrDetected = true;
+          
+              qrScanFrame.classList.add('is-visible');
+              qrScanFrame.classList.add('is-success');
+              qrResult.textContent = 'QRコードを認識しました';
+          
+              await new Promise(function(resolve) {
+                  setTimeout(resolve, 450);
+              });
+          
+              await scanner.stop().catch(function(error) {
+                  console.error(error);
+              });
+          
+              qrScanFrame.classList.remove('is-visible');
+          
+              await new Promise(function(resolve) {
+                  setTimeout(resolve, 180);
+              });
+          
+              qrScanFrame.classList.remove('is-success');
+              qrReader.style.display = 'none';
 
-             qrScanFrame.classList.add('is-success');
-            qrResult.textContent = 'QRコードを認識しました';
-            
-            await new Promise(function(resolve) {
-                setTimeout(resolve, 450);
-            });
-            
-            qrScanFrame.classList.remove('is-visible');
-
-            await new Promise(function(resolve) {
-                setTimeout(resolve, 180);
-            });
-            
-            qrScanFrame.classList.remove('is-success');
-            qrReader.style.display = 'none';
+    try {
              
              try {
                  const url = new URL(decodedText);
@@ -805,8 +816,10 @@ qrResult.textContent =
       }
     );
 
-  qrScanFrame.classList.add('is-visible');
-  qrResult.textContent = '読み取り待機中';
+  if (!qrDetected) {
+      qrScanFrame.classList.add('is-visible');
+      qrResult.textContent = '読み取り待機中';
+  }
           
   } catch (error) {
     qrReader.style.display = 'none';
