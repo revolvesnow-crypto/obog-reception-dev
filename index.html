@@ -100,7 +100,21 @@
         flex-shrink: 0;
         border-radius: 50%;
         background: #9ca3af;
+        animation: qr-status-pulse 1.4s ease-in-out infinite;
     }
+
+      @keyframes qr-status-pulse {
+          0%,
+          100% {
+              opacity: 0.45;
+              transform: scale(0.9);
+          }
+      
+          50% {
+              opacity: 1;
+              transform: scale(1);
+          }
+      }
 
     .qr-status.is-success {
         align-items: flex-start;
