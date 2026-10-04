@@ -768,10 +768,14 @@
             }
         
             qrDetected = true;
-        
+            
             qrScanFrame.classList.add('is-visible');
             qrScanFrame.classList.add('is-success');
             qrResult.textContent = 'QRコードを認識しました';
+            
+            if ('vibrate' in navigator) {
+                navigator.vibrate(60);
+            }
         
             await new Promise(function(resolve) {
                 setTimeout(resolve, 450);
