@@ -119,7 +119,7 @@
         color: #ffffff;
         font-size: 14px;
         font-weight: 700;
-        animation: qr-success-pop 0.24s ease-out;
+        animation: qr-success-pop 0.4s ease-out;
     }
 
     @keyframes qr-success-pop {
@@ -824,12 +824,23 @@
           qrResult.textContent =
               'QRコードを認識しました\n' +
               '参加者情報を確認しています...';
+
+          const successShownAt = Date.now();
     
         const callbackName = 'participantCallback_' + Date.now();
     
-       window[callbackName] = function(participant) {
-        if (participant.success) {
-            showParticipant(participant, 'QR');
+      window[callbackName] = async function(participant) {
+          if (participant.success) {
+              const elapsed = Date.now() - successShownAt;
+              const remaining = Math.max(0, 800 - elapsed);
+      
+              if (remaining > 0) {
+                  await new Promise(function(resolve) {
+                      setTimeout(resolve, remaining);
+                  });
+              }
+      
+              showParticipant(participant, 'QR');
         } else {
           
         qrResult.textContent =
