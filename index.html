@@ -119,6 +119,19 @@
         color: #ffffff;
         font-size: 14px;
         font-weight: 700;
+        animation: qr-success-pop 0.16s ease-out;
+    }
+
+    @keyframes qr-success-pop {
+        0% {
+            transform: scale(0.7);
+            opacity: 0;
+        }
+    
+        100% {
+            transform: scale(1);
+            opacity: 1;
+        }
     }
 
     #qr-shaded-region > div {
