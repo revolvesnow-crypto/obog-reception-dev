@@ -562,19 +562,31 @@
         ← 受付メニューに戻る
     </button>
 
-    <h2>名前で検索</h2>
+    <h2 class="search-screen-title">名前で検索</h2>
 
-    <label for="nameSearch">氏名・ふりがな</label>
-    
-    <input
-      type="text"
-      id="nameSearch"
-      placeholder="氏名またはふりがなを入力">
-    
-    <button type="button" id="nameSearchButton" onclick="searchParticipantsByName()">
-    名前で検索
+    <p class="search-screen-description">
+        参加者の氏名またはふりがなを入力してください
+    </p>
+
+    <div class="search-input-wrapper">
+        <span class="search-input-icon" aria-hidden="true">⌕</span>
+
+        <input
+            type="text"
+            id="nameSearch"
+            placeholder="氏名・ふりがなで検索"
+        >
+    </div>
+
+    <button
+        type="button"
+        id="nameSearchButton"
+        class="search-submit-button"
+        onclick="searchParticipantsByName()"
+    >
+        検索する
     </button>
-    
+
     <div id="nameSearchResults"></div>
 
 </div>
