@@ -519,6 +519,20 @@
     border-color: #24a259;
     font-weight: bold;
   }
+
+    .reception-list-scroll {
+        max-height: 48dvh;
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    .reception-list-scroll thead th {
+        position: sticky;
+        top: 0;
+        z-index: 2;
+        background: #ffffff;
+    }
     
 </style>
 </head>
