@@ -1300,7 +1300,11 @@ function searchParticipantsByName() {
       table.appendChild(row);
   });
   
-  listArea.appendChild(table);
+  const scrollArea = document.createElement('div');
+  scrollArea.className = 'reception-list-scroll';
+  
+  scrollArea.appendChild(table);
+  listArea.appendChild(scrollArea);
     }
 
     function sortReceptionList(key) {
