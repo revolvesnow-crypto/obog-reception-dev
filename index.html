@@ -50,9 +50,11 @@
         box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
     }
     
-    #qr-reader video {
+   #qr-reader video {
         display: block;
         width: 100% !important;
+        height: clamp(320px, 88vw, 460px) !important;
+        object-fit: cover;
         border-radius: 18px;
     }
     
