@@ -774,11 +774,11 @@
                 if (!receptionId) {
                     throw new Error('受付IDがURLに含まれていません');
                 }
-    
-        qrResult.textContent =
-            'QR読み取り成功！\n' +
-            '受付ID：' + receptionId +
-            '\n参加者情報を確認しています...';
+                     
+          qrResult.classList.add('is-success');
+          qrResult.textContent =
+              'QRコードを認識しました\n' +
+              '参加者情報を確認しています...';
     
         const callbackName = 'participantCallback_' + Date.now();
     
