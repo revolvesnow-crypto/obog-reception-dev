@@ -729,34 +729,33 @@
                 }
               },
            async function(decodedText) {
-              if (qrDetected) {
-                  return;
-              }
-          
-              qrDetected = true;
-          
-              qrScanFrame.classList.add('is-visible');
-              qrScanFrame.classList.add('is-success');
-              qrResult.textContent = 'QRコードを認識しました';
-          
-              await new Promise(function(resolve) {
-                  setTimeout(resolve, 450);
-              });
-          
-              await scanner.stop().catch(function(error) {
-                  console.error(error);
-              });
-          
-              qrScanFrame.classList.remove('is-visible');
-          
-              await new Promise(function(resolve) {
-                  setTimeout(resolve, 180);
-              });
-          
-              qrScanFrame.classList.remove('is-success');
-              qrReader.style.display = 'none';
-
-    try {
+            if (qrDetected) {
+                return;
+            }
+        
+            qrDetected = true;
+        
+            qrScanFrame.classList.add('is-visible');
+            qrScanFrame.classList.add('is-success');
+            qrResult.textContent = 'QRコードを認識しました';
+        
+            await new Promise(function(resolve) {
+                setTimeout(resolve, 450);
+            });
+        
+            await scanner.stop().catch(function(error) {
+                console.error(error);
+            });
+        
+            qrScanFrame.classList.remove('is-visible');
+        
+            await new Promise(function(resolve) {
+                setTimeout(resolve, 180);
+            });
+        
+            qrScanFrame.classList.remove('is-success');
+            qrReader.style.display = 'none';
+        
              
              try {
                  const url = new URL(decodedText);
