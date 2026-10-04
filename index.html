@@ -749,18 +749,21 @@
             await new Promise(function(resolve) {
                 setTimeout(resolve, 450);
             });
-        
-            await scanner.stop().catch(function(error) {
-                console.error(error);
-            });
-        
+            
             qrScanFrame.classList.remove('is-visible');
-        
+            
             await new Promise(function(resolve) {
                 setTimeout(resolve, 180);
             });
-        
+            
+            await scanner.stop().catch(function(error) {
+                console.error(error);
+            });
+            
+            scanner.clear();
+            
             qrScanFrame.classList.remove('is-success');
+            qrReader.replaceChildren();
             qrReader.style.display = 'none';
         
              
