@@ -1099,10 +1099,23 @@ function searchParticipantsByName() {
           document.getElementById('participantDetailArea');
   
       detailArea.innerHTML =
-          '氏名：' + participant.name + '<br>' +
-          '期数：' + participant.term + '<br>' +
-          '懇親会：' + (participant.partyStatus || '参加') + '<br>' +
-          '受付状況：' + participant.receptionStatus;
+      '<div class="participant-card">' +
+          '<div class="participant-card-name">' + participant.name + '</div>' +
+          '<div class="participant-card-info">' +
+              '<div class="participant-info-row">' +
+                  '<span class="participant-info-label">期数</span>' +
+                  '<span class="participant-info-value">' + (participant.term || '－') + '</span>' +
+              '</div>' +
+              '<div class="participant-info-row">' +
+                  '<span class="participant-info-label">懇親会</span>' +
+                  '<span class="participant-info-value">' + (participant.partyStatus || '参加') + '</span>' +
+              '</div>' +
+              '<div class="participant-info-row">' +
+                  '<span class="participant-info-label">受付状況</span>' +
+                  '<span class="participant-info-value">' + (participant.receptionStatus || '未受付') + '</span>' +
+              '</div>' +
+          '</div>' +
+      '</div>';
   
       renderReceptionAction(
           participant,
