@@ -798,8 +798,8 @@
 
 <div id="detailScreen" style="display: none;">
 
-    <button type="button" class="back-button" onclick="showHomeScreen()">
-        ← 受付メニューに戻る
+    <button type="button" id="detailBackButton" class="back-button" onclick="returnFromDetail()">
+        ← 前の画面に戻る
     </button>
 
     <h2>参加者詳細</h2>
@@ -823,7 +823,24 @@
   
   <script>
 
-    function showScreen(screenId) {
+   function showScreen(screenId) {
+    if (screenId === 'detailScreen') {
+        const currentScreen = [
+            'homeScreen',
+            'qrScreen',
+            'searchScreen',
+            'listScreen'
+        ].find(function(id) {
+            const screen = document.getElementById(id);
+            return screen && screen.style.display !== 'none';
+        });
+
+        if (currentScreen) {
+            detailReturnScreen = currentScreen;
+        }
+    }
+
+    const screenIds = [
         const screenIds = [
             'homeScreen',
             'qrScreen',
@@ -843,6 +860,8 @@
         });
     }
 
+    let detailReturnScreen = 'homeScreen';
+
     function showListScreen() {
         showScreen('listScreen');
     }
@@ -858,6 +877,44 @@
 
     function showHomeScreen() {
         showScreen('homeScreen');
+    }
+
+    function returnFromDetail() {
+        if (detailReturnScreen === 'listScreen') {
+            showListScreen();
+            return;
+        }
+    
+        if (detailReturnScreen === 'searchScreen') {
+            showSearchScreen();
+            return;
+        }
+    
+        if (detailReturnScreen === 'qrScreen') {
+            showQrScreen();
+            return;
+        }
+    
+        showHomeScreen();
+    }
+
+    function returnFromDetail() {
+        if (detailReturnScreen === 'listScreen') {
+            showListScreen();
+            return;
+        }
+    
+        if (detailReturnScreen === 'searchScreen') {
+            showSearchScreen();
+            return;
+        }
+    
+        if (detailReturnScreen === 'qrScreen') {
+            showQrScreen();
+            return;
+        }
+    
+        showHomeScreen();
     }
     
     function renderReceptionAction(
@@ -1194,8 +1251,14 @@ function searchParticipantsByName() {
   }
     
   function showParticipant(participant, method = '手動') {
-      const detailArea =
-          document.getElementById('participantDetailArea');
+    const currentScreen = document.querySelector('.screen:not([style*="display: none"])');
+
+    if (currentScreen && currentScreen.id !== 'detailScreen') {
+        detailReturnScreen = currentScreen.id;
+    }
+
+    const detailArea =
+        document.getElementById('participantDetailArea');
   
       detailArea.innerHTML =
       '<div class="participant-card">' +
