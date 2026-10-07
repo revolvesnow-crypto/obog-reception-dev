@@ -1402,6 +1402,11 @@ function searchParticipantsByName() {
       (listArea);
       
       renderReceptionList(receptionListData, listArea);
+
+      const scrollArea = listArea.querySelector('.reception-list-scroll');
+      if (scrollArea) {
+          scrollArea.scrollTop = 0;
+      }
       }
 
     function renderReceptionFilterControls(listArea) {
