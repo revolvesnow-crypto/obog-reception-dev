@@ -932,8 +932,7 @@
           executeCheckIn(participant, method, targetArea, checkInButton);
         };
         
-        qrResult.appendChild(document.createElement('br'));
-        qrResult.appendChild(document.createElement('br'));
+        
         qrResult.appendChild(checkInButton);
       } else {
           const cancelButton = document.createElement('button');
@@ -944,8 +943,6 @@
               executeCancel(participant, method, targetArea, cancelButton);
           };
           
-          qrResult.appendChild(document.createElement('br'));
-          qrResult.appendChild(document.createElement('br'));
           qrResult.appendChild(cancelButton);
       }
     }
