@@ -839,6 +839,7 @@
       if (participant.receptionStatus !== '受付済') {
         const checkInButton = document.createElement('button');
         checkInButton.textContent = '受付する';
+        checkInButton.className = 'reception-action-button reception-checkin-button';
         
         checkInButton.onclick = function() {
           executeCheckIn(participant, method, targetArea, checkInButton);
@@ -850,6 +851,7 @@
       } else {
           const cancelButton = document.createElement('button');
           cancelButton.textContent = '受付取消';
+          cancelButton.className = 'reception-action-button reception-cancel-button';
           
           cancelButton.onclick = function() {
               executeCancel(participant, method, targetArea, cancelButton);
