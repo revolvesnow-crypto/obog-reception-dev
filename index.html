@@ -595,6 +595,40 @@
     .participant-info-row:last-child {
         border-bottom: none;
     }
+
+    .participant-flip-container {
+        margin: 20px 0 16px;
+        perspective: 1200px;
+    }
+    
+    .participant-flip-inner {
+        display: grid;
+        transform-style: preserve-3d;
+        transition: transform 0.8s ease-in-out;
+    }
+    
+    .participant-flip-front,
+    .participant-flip-back {
+        grid-area: 1 / 1;
+        backface-visibility: hidden;
+        -webkit-backface-visibility: hidden;
+    }
+    
+    .participant-flip-front {
+        transform: rotateY(0deg);
+    }
+    
+    .participant-flip-back {
+        transform: rotateY(180deg);
+    }
+    
+    .participant-flip-container.is-flipped .participant-flip-inner {
+        transform: rotateY(180deg);
+    }
+    
+    .participant-flip-front .participant-card {
+        margin: 0;
+    }
     
     .participant-info-label {
         font-size: 14px;
@@ -1045,9 +1079,11 @@
     targetArea = document.getElementById('qr-result'),
     method = 'QR'
     ) {
-        const qrResult = targetArea;
-    
-      if (participant.receptionStatus !== '受付済') {
+    const qrResult = targetArea;
+
+    qrResult.replaceChildren();
+
+    if (participant.receptionStatus !== '受付済') {
         const checkInButton = document.createElement('button');
         checkInButton.textContent = '受付する';
         checkInButton.className = 'reception-action-button reception-checkin-button';
@@ -1083,8 +1119,11 @@
         if (result.success) {
           participant.receptionStatus = '受付済';
       
-          qrResult.innerHTML =
-              '<div class="reception-complete-card is-flipping">' +
+         const flipContainer = document.querySelector('.participant-flip-container');
+         const flipBack = flipContainer.querySelector('.participant-flip-back');
+          
+         flipBack.innerHTML =
+              '<div class="reception-complete-card">' +
                   '<div class="reception-complete-icon">✓</div>' +
                   '<div class="reception-complete-title">受付完了！</div>' +
                   '<div class="reception-complete-description">参加者の受付が完了しました</div>' +
@@ -1100,11 +1139,15 @@
                   '</div>' +
               '</div>';
           
-          const completeValues = qrResult.querySelectorAll('.reception-complete-row strong');
+         const completeValues = flipBack.querySelectorAll('.reception-complete-row strong');
           completeValues[0].textContent = result.name;
           completeValues[1].textContent = result.time;
+          
+         flipContainer.classList.add('is-flipped');
 
-          renderReceptionAction(participant, targetArea, method);
+          const actionArea = document.getElementById('receptionActionArea');
+          renderReceptionAction(participant, actionArea, method);
+          
           loadReceptionList();
         } else {
           checkInButton.disabled = false;
@@ -1144,11 +1187,22 @@
             if (result.success) {
                 participant.receptionStatus = '未受付';
         
-                qrResult.innerHTML =
-                    '✓ 受付取消完了<br><br>' +
-                    '氏名：' + result.name;
-        
-                renderReceptionAction(participant, targetArea, method);   
+                const flipContainer = document.querySelector('.participant-flip-container');
+
+              const statusElement = flipContainer.querySelector('.participant-status');
+
+              if (statusElement) {
+                  statusElement.className = 'participant-status is-pending';
+              
+                  statusElement.querySelector('.participant-status-icon').textContent = '－';
+                  statusElement.querySelector('span:last-child').textContent = '未受付';
+              }
+
+                flipContainer.classList.remove('is-flipped');
+                
+                const actionArea = document.getElementById('receptionActionArea');
+                renderReceptionAction(participant, actionArea, method);
+                
                 loadReceptionList();
             } else {
                 cancelButton.disabled = false;
@@ -1392,7 +1446,10 @@ function searchParticipantsByName() {
         document.getElementById('participantDetailArea');
   
       detailArea.innerHTML =
-      '<div class="participant-card">' +
+          '<div class="participant-flip-container">' +
+              '<div class="participant-flip-inner">' +
+                  '<div class="participant-flip-front">' +
+                      '<div class="participant-card">' +
           '<div class="participant-card-name">' + participant.name + '</div>' +
           '<div class="participant-card-info">' +
               '<div class="participant-info-row">' +
@@ -1416,12 +1473,21 @@ function searchParticipantsByName() {
                       '</span>' +
                   '</span>' +
               '</div>' +
-          '</div>' +
-      '</div>';
+                  '</div>' +
+              '</div>' +
+              '</div>' +
+              '<div class="participant-flip-back"></div>' +
+              '</div>' +
+              '</div>';
   
+      const actionArea = document.createElement('div');
+      actionArea.id = 'receptionActionArea';
+      
+      detailArea.appendChild(actionArea);
+      
       renderReceptionAction(
           participant,
-          detailArea,
+          actionArea,
           method
       );
   
