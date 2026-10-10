@@ -702,6 +702,34 @@
         text-align: center;
         box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
     }
+
+    .reception-complete-card.is-flipping {
+        animation: reception-card-flip 0.75s ease-in-out both;
+        backface-visibility: hidden;
+    }
+    
+    @keyframes reception-card-flip {
+        0% {
+            transform: perspective(1000px) rotateY(180deg);
+            opacity: 0.7;
+        }
+    
+        50% {
+            transform: perspective(1000px) rotateY(90deg);
+            opacity: 0.9;
+        }
+    
+        100% {
+            transform: perspective(1000px) rotateY(0deg);
+            opacity: 1;
+        }
+    }
+    
+    @media (prefers-reduced-motion: reduce) {
+        .reception-complete-card.is-flipping {
+            animation: none;
+        }
+    }
     
     .reception-complete-icon {
         display: flex;
@@ -1057,7 +1085,7 @@
           participant.receptionStatus = '受付済';
       
           qrResult.innerHTML =
-              '<div class="reception-complete-card">' +
+              '<div class="reception-complete-card is-flipping">' +
                   '<div class="reception-complete-icon">✓</div>' +
                   '<div class="reception-complete-title">受付完了！</div>' +
                   '<div class="reception-complete-description">参加者の受付が完了しました</div>' +
