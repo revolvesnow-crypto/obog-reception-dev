@@ -693,6 +693,67 @@
         background: #b8c2cf;
         color: #ffffff;
     }
+
+    .reception-complete-card {
+        padding: 28px 24px;
+        border: 1px solid #e5e7eb;
+        border-radius: 18px;
+        background: #ffffff;
+        text-align: center;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+    }
+    
+    .reception-complete-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 64px;
+        height: 64px;
+        margin: 0 auto 16px;
+        border-radius: 50%;
+        background: #dcfce7;
+        color: #16a34a;
+        font-size: 36px;
+        font-weight: 700;
+    }
+    
+    .reception-complete-title {
+        color: #16a34a;
+        font-size: 26px;
+        font-weight: 700;
+    }
+    
+    .reception-complete-description {
+        margin-top: 8px;
+        color: #6b7280;
+        font-size: 14px;
+    }
+    
+    .reception-complete-info {
+        margin-top: 24px;
+        padding-top: 8px;
+        border-top: 1px solid #e5e7eb;
+    }
+    
+    .reception-complete-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 14px 0;
+        font-size: 15px;
+        text-align: left;
+    }
+    
+    .reception-complete-row span {
+        color: #6b7280;
+    }
+    
+    .reception-complete-row strong {
+        color: #222222;
+        font-weight: 700;
+        text-align: right;
+    }
  
 </style>
 </head>
@@ -996,13 +1057,25 @@
           participant.receptionStatus = '受付済';
       
           qrResult.innerHTML =
-            '✓ 受付完了！<br><br>' +
-            '氏名：' + result.name + '<br>' +
-            '受付時刻：' + result.time;
-      
-          alert(
-            result.name + ' 様の受付が完了しました。\n' +
-            '受付時刻：' + result.time
+              '<div class="reception-complete-card">' +
+                  '<div class="reception-complete-icon">✓</div>' +
+                  '<div class="reception-complete-title">受付完了！</div>' +
+                  '<div class="reception-complete-description">参加者の受付が完了しました</div>' +
+                  '<div class="reception-complete-info">' +
+                      '<div class="reception-complete-row">' +
+                          '<span>氏名</span>' +
+                          '<strong></strong>' +
+                      '</div>' +
+                      '<div class="reception-complete-row">' +
+                          '<span>受付時刻</span>' +
+                          '<strong></strong>' +
+                      '</div>' +
+                  '</div>' +
+              '</div>';
+          
+          const completeValues = qrResult.querySelectorAll('.reception-complete-row strong');
+          completeValues[0].textContent = result.name;
+          completeValues[1].textContent = result.time;
           );
 
           renderReceptionAction(participant, targetArea, method);
