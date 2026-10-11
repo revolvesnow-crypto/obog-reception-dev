@@ -1858,5 +1858,35 @@ function searchParticipantsByName() {
     
   </script>
 
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-app.js";
+    import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-auth.js";
+
+      const firebaseConfig = {
+          apiKey: "AIzaSyAzj4aAmcrEwPbALLW2drCIqaXza27lKlQ",
+          authDomain: "obog-reception-dev.firebaseapp.com",
+          projectId: "obog-reception-dev",
+          storageBucket: "obog-reception-dev.firebasestorage.app",
+          messagingSenderId: "913195421770",
+          appId: "1:913195421770:web:6afedaeb72c4a53eb416b3"
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app);
+      const provider = new GoogleAuthProvider();
+
+      async function loginWithGoogle() {
+          try {
+              const result = await signInWithPopup(auth, provider);
+              console.log('Googleログイン成功:', result.user.email);
+          } catch (error) {
+              console.error('Googleログイン失敗:', error);
+              alert('Googleログインに失敗しました。もう一度お試しください。');
+          }
+      }
+
+      window.loginWithGoogle = loginWithGoogle;
+</script>
+  
 </body>
 </html>
