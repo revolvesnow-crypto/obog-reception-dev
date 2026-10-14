@@ -821,6 +821,11 @@
 
 <body>
 
+      <div id="loginScreen" style="display: block;">
+          <h2>スタッフログイン</h2>
+          <button type="button" id="googleLoginButton">Googleアカウントでログイン</button>
+      </div>
+
  <div class="brand-header">
        <div class="environment-badge">DEV</div>
       <div class="brand-choir">新大合唱団</div>
@@ -1886,6 +1891,10 @@ function searchParticipantsByName() {
       }
 
       window.loginWithGoogle = loginWithGoogle;
+
+      const googleLoginButton = document.getElementById('googleLoginButton');
+
+      googleLoginButton.addEventListener('click', loginWithGoogle);
 </script>
   
 </body>
