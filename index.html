@@ -1880,6 +1880,14 @@ function searchParticipantsByName() {
       const auth = getAuth(app);
       const provider = new GoogleAuthProvider();
 
+        onAuthStateChanged(auth, function(user) {
+            if (user) {
+                console.log('ログイン状態：ログイン中');
+            } else {
+                console.log('ログイン状態：未ログイン');
+            }
+        });
+
       async function loginWithGoogle() {
           try {
               const result = await signInWithPopup(auth, provider);
