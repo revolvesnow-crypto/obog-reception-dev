@@ -1869,7 +1869,7 @@ function searchParticipantsByName() {
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-app.js";
-    import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-auth.js";
+   import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut, getIdToken } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-auth.js";
 
       const firebaseConfig = {
           apiKey: "AIzaSyAZj4aAMcrEwPbALLW2drCIqaXza271KlQ",
@@ -1898,6 +1898,29 @@ function searchParticipantsByName() {
                 receptionApp.style.display = 'none';
             }
         });
+
+  async function testAuthToken() {
+    const user = auth.currentUser;
+  
+    if (!user) {
+      console.log('認証テスト：未ログイン');
+      return;
+    }
+  
+    try {
+      const token = await getIdToken(user);
+  
+      console.log('認証テスト：IDトークン取得成功');
+      console.log('ログインユーザー:', user.email);
+      console.log('UID:', user.uid);
+      console.log('トークン取得:', Boolean(token));
+  
+    } catch (error) {
+      console.error('認証テスト失敗:', error);
+    }
+  }
+  
+  window.testAuthToken = testAuthToken;
 
       async function loginWithGoogle() {
           try {
