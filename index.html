@@ -1165,16 +1165,28 @@
         }
       };
 
-      const script = document.createElement('script');
-      
-      script.src =
-        'https://script.google.com/macros/s/AKfycbzdRcn5Jpi1K4feibiRSs8t6nFVJl9VJI7lpQ-ort--k9a2A7ENJG1CR55ml3z_n4AP/exec' +
-        '?api=checkin' +
-        '&id=' + encodeURIComponent(participant.receptionId) +
-        '&method=' + encodeURIComponent(method) +
-        '&callback=' + encodeURIComponent(callbackName);
-      
-      document.body.appendChild(script);
+     
+      // Cloud Run経由で認証付き受付を実行
+      window.callStaffApi(
+        'staff-action',
+        'checkin',
+        participant.receptionId,
+        method
+      )
+      .then(function(result) {
+        // 既存の受付完了表示処理を再利用
+        window[callbackName](result);
+      })
+      .catch(function(error) {
+        checkInButton.disabled = false;
+        checkInButton.textContent = '受付する';
+
+        alert('受付処理に失敗しました：' + error.message);
+      })
+      .finally(function() {
+        delete window[callbackName];
+      });
+
       
     }
 
@@ -1218,21 +1230,32 @@
                 cancelButton.textContent = '受付取消';
                 alert(result.message);
             }
-            delete window[callbackName];
-            script.remove();
+          
           
         };
 
-        const script = document.createElement('script');
-        
-        script.src =
-            'https://script.google.com/macros/s/AKfycbzdRcn5Jpi1K4feibiRSs8t6nFVJl9VJI7lpQ-ort--k9a2A7ENJG1CR55ml3z_n4AP/exec' +
-            '?api=cancel' +
-            '&id=' + encodeURIComponent(participant.receptionId) +
-            '&method=' + encodeURIComponent(method) +
-            '&callback=' + encodeURIComponent(callbackName);
-        
-        document.body.appendChild(script);
+       
+        // Cloud Run経由で認証付き受付取消を実行
+        window.callStaffApi(
+          'staff-action',
+          'cancel',
+          participant.receptionId,
+          method
+        )
+        .then(function(result) {
+          // 既存の受付取消後の表示処理を再利用
+          window[callbackName](result);
+        })
+        .catch(function(error) {
+          cancelButton.disabled = false;
+          cancelButton.textContent = '受付取消';
+
+          alert('受付取消処理に失敗しました：' + error.message);
+        })
+        .finally(function() {
+          delete window[callbackName];
+        });
+
       
     }
     
@@ -1318,48 +1341,35 @@
 
           const successShownAt = Date.now();
     
-        const callbackName = 'participantCallback_' + Date.now();
-    
-      window[callbackName] = async function(participant) {
-          if (participant.success) {
-              const elapsed = Date.now() - successShownAt;
-              const remaining = Math.max(0, 800 - elapsed);
-      
-              if (remaining > 0) {
-                  await new Promise(function(resolve) {
-                      setTimeout(resolve, remaining);
-                  });
-              }
-      
-              showParticipant(participant, 'QR');
-        } else {
-          
-        qrResult.textContent =
-            '参加者を確認できませんでした。\n' +
-            participant.message;
-    }
+        
+          // Cloud Run経由で認証付き参加者情報を取得
+          try {
+            const participant = await window.callStaffApi(
+              'staff-read',
+              'participant',
+              receptionId
+            );
 
-    delete window[callbackName];
-    script.remove();
-};
+            // QR読み取り成功の表示時間を確保
+            const elapsed = Date.now() - successShownAt;
+            const remaining = Math.max(0, 800 - elapsed);
 
-    const script = document.createElement('script');
-    
-    script.src =
-      'https://script.google.com/macros/s/AKfycbzdRcn5Jpi1K4feibiRSs8t6nFVJl9VJI7lpQ-ort--k9a2A7ENJG1CR55ml3z_n4AP/exec' +
-      '?api=participant' +
-      '&id=' + encodeURIComponent(receptionId) +
-      '&callback=' + encodeURIComponent(callbackName);
-    
-    script.onerror = function() {
-        qrResult.innerHTML +=
-            '<br>参加者情報の取得に失敗しました。';
-    
-        delete window[callbackName];
-        script.remove();
-    };
+            if (remaining > 0) {
+              await new Promise(function(resolve) {
+                setTimeout(resolve, remaining);
+              });
+            }
 
-    document.body.appendChild(script);
+            // 既存の参加者詳細画面を表示
+            showParticipant(participant, 'QR');
+
+          } catch (error) {
+            qrResult.classList.remove('is-success');
+            qrResult.textContent =
+              '参加者を確認できませんでした。\n' +
+              error.message;
+          }
+
 
 } catch (error) {
 qrResult.textContent =
@@ -1503,74 +1513,65 @@ function searchParticipantsByName() {
       showScreen('detailScreen');
   }
 
-    function loadReceptionList() {
-      const listArea = document.getElementById('receptionListArea');
-    
-      listArea.textContent = '受付一覧を読み込み中...';
-    
-      const callbackName = 'receptionListCallback_' + Date.now();
-    
-      window[callbackName] = function(participants) {
-        console.log(participants);
-        
-        receptionListData = participants;
-        receptionListLoaded = true;
-
-        const totalCount = participants.length;
-        const checkedInCount = participants.filter(function(participant) {
-            return participant.receptionStatus === '受付済';
-        }).length;
-        const pendingCount = totalCount - checkedInCount;
-        
-        document.getElementById('totalCount').textContent = totalCount;
-        document.getElementById('checkedInCount').textContent = checkedInCount;
-        document.getElementById('pendingCount').textContent = pendingCount;
-
-        if (pendingNameSearch) {
-            pendingNameSearch = false;
-            searchParticipantsByName();
-        }
-
-        receptionListData.sort(function(a, b) {
-          const valueA = String(a.kana || '');
-          const valueB = String(b.kana || '');
-        
-          return valueA.localeCompare(
-            valueB,
-            'ja',
-            { numeric: true }
-          );
-        });
-      
-        listArea.replaceChildren();
-      
-        const summary = document.createElement('p');
-        summary.textContent = '参加者：' + participants.length + '名';
-        listArea.appendChild(summary);
-
-        renderReceptionFilterControls(listArea);
-        renderReceptionList(receptionListData, listArea);
-      
-        delete window[callbackName];
-        script.remove();
-      };
-    
-      const script = document.createElement('script');
-    
-      script.src =
-        'https://script.google.com/macros/s/AKfycbzdRcn5Jpi1K4feibiRSs8t6nFVJl9VJI7lpQ-ort--k9a2A7ENJG1CR55ml3z_n4AP/exec' +
-        '?api=list' +
-        '&callback=' + encodeURIComponent(callbackName);
-    
-      script.onerror = function() {
-        listArea.textContent = '受付一覧の取得に失敗しました。';
-    
-        delete window[callbackName];
-        script.remove();
-      };
-    
-      document.body.appendChild(script);
+  async function loadReceptionList() {
+    const listArea = document.getElementById('receptionListArea');
+  
+    listArea.textContent = '受付一覧を読み込み中...';
+  
+    try {
+      // Firebase認証付きでCloud Runから一覧を取得
+      const result = await window.callStaffApi('staff-read', 'list');
+      const participants = result.participants;
+  
+      if (!Array.isArray(participants)) {
+        throw new Error('参加者一覧の形式が正しくありません。');
+      }
+  
+      receptionListData = participants;
+      receptionListLoaded = true;
+  
+      const totalCount = participants.length;
+      const checkedInCount = participants.filter(function(participant) {
+        return participant.receptionStatus === '受付済';
+      }).length;
+      const pendingCount = totalCount - checkedInCount;
+  
+      document.getElementById('totalCount').textContent = totalCount;
+      document.getElementById('checkedInCount').textContent = checkedInCount;
+      document.getElementById('pendingCount').textContent = pendingCount;
+  
+      if (pendingNameSearch) {
+        pendingNameSearch = false;
+        searchParticipantsByName();
+      }
+  
+      receptionListData.sort(function(a, b) {
+        const valueA = String(a.kana || '');
+        const valueB = String(b.kana || '');
+  
+        return valueA.localeCompare(
+          valueB,
+          'ja',
+          { numeric: true }
+        );
+      });
+  
+      listArea.replaceChildren();
+  
+      const summary = document.createElement('p');
+      summary.textContent = '参加者：' + participants.length + '名';
+      listArea.appendChild(summary);
+  
+      renderReceptionFilterControls(listArea);
+      renderReceptionList(receptionListData, listArea);
+  
+    } catch (error) {
+      receptionListLoaded = false;
+      listArea.textContent = '受付一覧の取得に失敗しました。';
+      console.error('受付一覧取得エラー:', error);
     }
+  }
+
 
     let receptionListData = [];
     let receptionListLoaded = false;
@@ -1860,11 +1861,6 @@ function searchParticipantsByName() {
     }
     
   
-
-    window.addEventListener('DOMContentLoaded', function() {
-    loadReceptionList();
-    });
-    
   </script>
 
 <script type="module">
@@ -1884,20 +1880,119 @@ function searchParticipantsByName() {
       const auth = getAuth(app);
       const provider = new GoogleAuthProvider();
 
-        onAuthStateChanged(auth, function(user) {
-            const loginScreen = document.getElementById('loginScreen');
-            const receptionApp = document.getElementById('receptionApp');
-        
-            if (user) {
-                console.log('ログイン状態：ログイン中');
-                loginScreen.style.display = 'none';
-                receptionApp.style.display = 'block';
-            } else {
-                console.log('ログイン状態：未ログイン');
-                loginScreen.style.display = 'block';
-                receptionApp.style.display = 'none';
-            }
+  
+      // Cloud Run経由で認証付きスタッフAPIを呼び出す
+      const CLOUD_RUN_API_URL =
+        'https://obog-reception-api-dev-913195421770.asia-northeast1.run.app';
+
+      window.callStaffApi = async function(
+        action,
+        operation,
+        receptionId = undefined,
+        method = 'QR'
+      ) {
+        const user = auth.currentUser;
+
+        if (!user) {
+          throw new Error('スタッフログインが必要です。');
+        }
+
+        if (!['staff-read', 'staff-action'].includes(action)) {
+          throw new Error('不正なAPI操作です。');
+        }
+
+        const token = await getIdToken(user);
+
+        const body = { action, operation };
+
+        if (receptionId !== undefined) {
+          body.receptionId = receptionId;
+        }
+
+        if (action === 'staff-action') {
+          body.method = method;
+        }
+
+        const response = await fetch(CLOUD_RUN_API_URL, {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(body)
         });
+
+        const result = await response.json();
+
+        if (!response.ok || result.success === false) {
+          throw new Error(
+            result.message || result.error || 'API通信に失敗しました。'
+          );
+        }
+
+        return result;
+      };
+
+
+            
+    onAuthStateChanged(auth, async function(user) {
+      const loginScreen = document.getElementById('loginScreen');
+      const receptionApp = document.getElementById('receptionApp');
+    
+      // 権限確認が終わるまでは受付画面を表示しない
+      loginScreen.style.display = 'block';
+      receptionApp.style.display = 'none';
+    
+      if (!user) {
+        console.log('ログイン状態：未ログイン');
+        return;
+      }
+    
+      try {
+        const token = await getIdToken(user);
+    
+        // Cloud Runでスタッフ権限を確認
+        const response = await fetch(CLOUD_RUN_API_URL, {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({})
+        });
+    
+        const result = await response.json();
+    
+        if (!response.ok || result.authenticated !== true) {
+          throw new Error('スタッフ認証に失敗しました。');
+        }
+    
+        // 認証中にログインユーザーが変わっていたら表示しない
+        if (auth.currentUser?.uid !== user.uid) {
+          return;
+        }
+    
+        console.log('スタッフ認証：成功');
+    
+        loginScreen.style.display = 'none';
+        receptionApp.style.display = 'block';
+    
+        // 認証成功後に参加者一覧を取得
+        loadReceptionList();
+    
+      } catch (error) {
+        console.error('スタッフ認証エラー:', error);
+    
+        loginScreen.style.display = 'block';
+        receptionApp.style.display = 'none';
+    
+        alert(
+          'スタッフ権限を確認できませんでした。' +
+          'アカウントや通信状態を確認してください。'
+        );
+      }
+    });
+
 
   async function testAuthToken() {
     const user = auth.currentUser;
